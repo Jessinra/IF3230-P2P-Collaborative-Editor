@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.shape.Box?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="Backend.UIControllers.PeersController"
-      prefWidth="150">
-    <padding> <Insets top="10" left="10" right="10" bottom="10"/></padding>
 
-    <Label text="Peers:" />
-    <Label text="Shandy" />
-    <Label text="Jessin" />
-    <Label text="Yuda" />
+<VBox fx:id="VBox_peer" prefWidth="150" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Backend.UIControllers.PeersController"
+      spacing="5">
+    <padding> <Insets bottom="10" left="10" right="10" top="10" /></padding>
+
+   <children>
+       <Button fx:id="button1" text="changeButton" onAction="#changePeersOne" />
+       <Label text="Peers: "/>
+
+       <fx:include fx:id="peers1" source="PeerBox.fxml"/>
+       <fx:include fx:id="peers2" source="PeerBox.fxml"/>
+       <fx:include fx:id="peers3" source="PeerBox.fxml"/>
+       <fx:include fx:id="peers4" source="PeerBox.fxml"/>
+       <fx:include fx:id="peers5" source="PeerBox.fxml"/>
+   </children>
 
 </VBox>

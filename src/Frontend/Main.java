@@ -1,8 +1,10 @@
 package Frontend;
 
+import Backend.UIControllers.PeersController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -19,9 +21,14 @@ public class Main extends Application {
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("FXML/MainUI.fxml"));
+
+        // Initialize Main UI FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/MainUI.fxml"));
+
+        Parent root = (Parent) loader.load();
         primaryStage.setTitle("Peer2Peer Collaborative Editing");
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
