@@ -1,4 +1,4 @@
-package Backend.UIControllers;
+package Backend.UI;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

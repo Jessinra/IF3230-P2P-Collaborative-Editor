@@ -10,12 +10,11 @@
 <?import javafx.geometry.Insets?>
 
 <VBox fx:id="VBox_peer" prefWidth="150" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="Backend.UIControllers.PeersController"
+      fx:controller="Backend.UI.PeersController"
       spacing="5">
     <padding> <Insets bottom="10" left="10" right="10" top="10" /></padding>
 
    <children>
-       <Button fx:id="button1" text="changeButton" onAction="#changePeersOne" />
        <Label text="Peers: "/>
 
        <fx:include fx:id="peers1" source="PeerBox.fxml"/>

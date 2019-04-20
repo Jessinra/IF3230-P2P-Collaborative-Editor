@@ -1,4 +1,4 @@
-package Backend.UIControllers;
+package Backend.UI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

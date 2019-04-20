@@ -10,7 +10,7 @@
 <ListView xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:id="file_list"
-          fx:controller="Backend.UIControllers.FileListController"
+          fx:controller="Backend.UI.FileListController"
           prefWidth="150.0">
 
     <items>
