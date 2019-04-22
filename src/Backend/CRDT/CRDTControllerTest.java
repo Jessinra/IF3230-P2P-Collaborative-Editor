@@ -1,6 +1,7 @@
 package Backend.CRDT;
 
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CRDTControllerTest {
@@ -330,9 +331,9 @@ class CRDTControllerTest {
     void testConflict() {
         CRDTChar r1 = new CRDTChar("testingClient", 'Y');
 
-        // Add delay 500ms
+        // Add delay 10ms
         try {
-            Thread.sleep(500);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
