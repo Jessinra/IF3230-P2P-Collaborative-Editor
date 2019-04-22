@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Backend.UIControllers.PeerBoxController"
+           alignment="CENTER_LEFT" >
+
+    <Rectangle fx:id="peer_rectangle" arcHeight="20" arcWidth="10" />
+
+    <Label fx:id="peer_label" />
+
+</StackPane>
