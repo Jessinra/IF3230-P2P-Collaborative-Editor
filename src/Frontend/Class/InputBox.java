@@ -30,7 +30,9 @@ public class InputBox {
 
         // Textfield
         TextField textField = new TextField();
+        textField.setPrefHeight(200);
         textField.setPrefWidth(200);
+
 
         // Layout
         BorderPane borderPane = new BorderPane();

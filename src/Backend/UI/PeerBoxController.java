@@ -10,6 +10,7 @@ public class PeerBoxController {
     @FXML private Rectangle peer_rectangle;
     @FXML private Label peer_label;
 
+
     /* =================================================================
                                     GETTER
     ================================================================= */

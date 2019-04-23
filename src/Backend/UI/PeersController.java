@@ -1,7 +1,10 @@
 package Backend.UI;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -14,11 +17,11 @@ public class PeersController {
     @FXML private Button button1;
 
     // PeerBoxControllers
-    @FXML private PeerBoxController peers1Controller;
-    @FXML private PeerBoxController peers2Controller;
-    @FXML private PeerBoxController peers3Controller;
-    @FXML private PeerBoxController peers4Controller;
-    @FXML private PeerBoxController peers5Controller;
+    @FXML private PeerBoxController peer1Controller;
+    @FXML private PeerBoxController peer2Controller;
+    @FXML private PeerBoxController peer3Controller;
+    @FXML private PeerBoxController peer4Controller;
+    @FXML private PeerBoxController peer5Controller;
 
     double computeTextWidth(Font font, String text, double wrappingWidth) {
         Text helper = new Text();
@@ -39,34 +42,34 @@ public class PeersController {
         double text_label_width;
         switch (num){
             case 1:
-                peers1Controller.setRectangleColor(color);
-                peers1Controller.setLabelText(text_label);
+                peer1Controller.setRectangleColor(color);
+                peer1Controller.setLabelText(text_label);
                 text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peers1Controller.setRectangleSize(text_label_width,20);
+                peer1Controller.setRectangleSize(text_label_width,20);
                 break;
             case 2:
-                peers2Controller.setRectangleColor(color);
-                peers2Controller.setLabelText(text_label);
+                peer2Controller.setRectangleColor(color);
+                peer2Controller.setLabelText(text_label);
                 text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peers2Controller.setRectangleSize(text_label_width,20);
+                peer2Controller.setRectangleSize(text_label_width,20);
                 break;
             case 3:
-                peers3Controller.setRectangleColor(color);
-                peers3Controller.setLabelText(text_label);
+                peer3Controller.setRectangleColor(color);
+                peer3Controller.setLabelText(text_label);
                 text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peers3Controller.setRectangleSize(text_label_width,20);
+                peer3Controller.setRectangleSize(text_label_width,20);
                 break;
             case 4:
-                peers4Controller.setRectangleColor(color);
-                peers4Controller.setLabelText(text_label);
+                peer4Controller.setRectangleColor(color);
+                peer4Controller.setLabelText(text_label);
                 text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peers4Controller.setRectangleSize(text_label_width,20);
+                peer4Controller.setRectangleSize(text_label_width,20);
                 break;
             case 5:
-                peers5Controller.setRectangleColor(color);
-                peers5Controller.setLabelText(text_label);
+                peer5Controller.setRectangleColor(color);
+                peer5Controller.setLabelText(text_label);
                 text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peers5Controller.setRectangleSize(text_label_width,20);
+                peer5Controller.setRectangleSize(text_label_width,20);
                 break;
             default:
                 break;

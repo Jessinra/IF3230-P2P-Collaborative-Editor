@@ -20,7 +20,9 @@
     </left>
 
     <center>
-        <TextArea fx:id="main_text_area" onKeyPressed="#handleTextAreaInput">
+        <TextArea fx:id="main_text_area" onKeyPressed="#handleTextAreaInput"
+                  onMouseClicked="#resetCursor"
+                  prefWidth="125" wrapText="true">
 
         </TextArea>
     </center>
