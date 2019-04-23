@@ -11,6 +11,7 @@ public class CRDTController {
 
     private String clientId;
     private ArrayList<CRDTChar> textContent = new ArrayList<>();
+    private ArrayList<CRDTLog> versionVector = new ArrayList<>();
 
     /* =================================================================
                                 Constructor
@@ -44,22 +45,29 @@ public class CRDTController {
         this.textContent.add(index, c);
     }
 
+    public ArrayList<CRDTLog> getVersionVector() {
+        return versionVector;
+    }
+
+    public void setVersionVector(ArrayList<CRDTLog> versionVector) {
+        this.versionVector = versionVector;
+    }
     /* =================================================================
                               Public API call
     ================================================================= */
 
     public CRDTChar localInsert(char value, int index) {
-
         CRDTChar newChar = this.generateCRDTChar(value, index);
         this.textContent.add(index, newChar);
+        this.versionVector.add(new CRDTLog(newChar, 1));
 
         return newChar;
     }
 
     public CRDTChar localDelete(int index) {
-
         CRDTChar deleted = this.textContent.get(index);
         this.textContent.remove(index);
+        this.versionVector.add(new CRDTLog(deleted, 0));
 
         return deleted;
     }
@@ -67,10 +75,12 @@ public class CRDTController {
     public void remoteInsert(CRDTChar newChar) {
         int index = this.calculateInsertIndexOf(newChar);
         this.textContent.add(index, newChar);
+        this.versionVector.add(new CRDTLog(newChar, 1));
     }
 
     public void remoteDelete(CRDTChar deletedChar) {
         this.textContent.remove(deletedChar);
+        this.versionVector.add(new CRDTLog(deletedChar, 0));
     }
 
     public String getText() {
@@ -81,8 +91,30 @@ public class CRDTController {
         return sb.toString();
     }
 
+    public CRDTLog getLastUpdate() {
+        try {
+            return getLogAt(this.versionVector.size() - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public CRDTLog getLogAt(int i) {
+        try {
+            return this.versionVector.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void resetText() {
         this.textContent.clear();
+    }
+
+    public void resetLog() {
+        this.versionVector.clear();
     }
 
     /* =================================================================
@@ -211,11 +243,23 @@ public class CRDTController {
                 else if (newCharNum < currCharNum) {
                     return i;
                 }
+
+                // if conflict (check for timestamp)
+                else if (newCharNum == currCharNum) {
+
+                    long newTimeStamp = newChar.getTimeStamp();
+                    long currTimeStamp = this.textContent.get(i).getTimeStamp();
+
+                    if (newTimeStamp > currTimeStamp) {
+                        break;
+                    } else if (newTimeStamp < currTimeStamp) {
+                        return i;
+                    }
+                }
             }
         }
 
         // Insert as last
         return this.textContent.size();
     }
-
 }

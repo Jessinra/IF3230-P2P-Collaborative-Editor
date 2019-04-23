@@ -1,4 +1,4 @@
-package Frontend;
+package Frontend.Class;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +17,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Initialize Main UI FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/MainUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/MainUI.fxml"));
 
         Parent root = (Parent) loader.load();
         primaryStage.setTitle("Peer2Peer Collaborative Editing");

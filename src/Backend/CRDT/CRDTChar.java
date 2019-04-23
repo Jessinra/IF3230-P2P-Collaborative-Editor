@@ -2,9 +2,11 @@ package Backend.CRDT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class CRDTChar {
 
+    private long timeStamp;
     private String writerId;
     private char value;
     private ArrayList<Integer> position = new ArrayList<>();
@@ -16,12 +18,16 @@ public class CRDTChar {
     public CRDTChar(String writerId, char value) {
         this.writerId = writerId;
         this.value = value;
+
+        this.timeStamp = new Date().getTime();
     }
 
     public CRDTChar(String writerId, char value, ArrayList<Integer> position) {
         this.writerId = writerId;
         this.value = value;
         this.position = position;
+
+        this.timeStamp = new Date().getTime();
     }
 
     /* =================================================================
@@ -52,9 +58,16 @@ public class CRDTChar {
         this.position = position;
     }
 
-
     public void addToPosition(int i) {
         this.position.add(i);
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     /* =================================================================

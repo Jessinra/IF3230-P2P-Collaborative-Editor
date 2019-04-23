@@ -1,6 +1,7 @@
 package Backend.CRDT;
 
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CRDTControllerTest {
@@ -295,9 +296,8 @@ class CRDTControllerTest {
     void testRemoteDeleteMid() {
         assertEquals("MEGUMI", controller.getText());
 
-        CRDTChar r3 = new CRDTChar("testingClient", 'G');
-        r3.addToPosition(3);
-        controller.remoteDelete(r3);
+        CRDTChar delete = controller.getTextContent().get(2);
+        controller.remoteDelete(delete);
 
         assertEquals("MEUMI", controller.getText());
     }
@@ -325,5 +325,36 @@ class CRDTControllerTest {
         r1.addToPosition(8);
         controller.remoteDelete(r1);
         assertEquals("MEGUMI", controller.getText());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testConflict() {
+        CRDTChar r1 = new CRDTChar("testingClient", 'Y');
+
+        // Add delay 10ms
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        CRDTChar r2 = new CRDTChar("testingClient", 'Z');
+
+        r1.addToPosition(3);
+        r2.addToPosition(3);
+        r1.addToPosition(1);
+        r2.addToPosition(1);
+
+        controller.remoteInsert(r1);
+        controller.remoteInsert(r2);
+        assertEquals("MEGYZUMI", controller.getText());
+
+        controller.remoteDelete(r1);
+        controller.remoteDelete(r2);
+        assertEquals("MEGUMI", controller.getText());
+
+        controller.remoteInsert(r2);
+        controller.remoteInsert(r1);
+        assertEquals("MEGYZUMI", controller.getText());
     }
 }

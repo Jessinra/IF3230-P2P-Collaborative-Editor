@@ -109,7 +109,24 @@ public class IOController {
     }
 
     /* =================================================================
-                                  Private Methods
+                                 Text Methods
+    ================================================================= */
+    public void insert(String value, int index) throws IOException {
+        try {
+            outfile.write(value, index, 1);
+        }
+        catch(IOException e){
+            System.out.println("ERROR: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(String value, int index) throws IOException {
+
+    }
+
+    /* =================================================================
+                                Private Methods
     ================================================================= */
     private void loadFile(String filename) throws IOException {
         try {

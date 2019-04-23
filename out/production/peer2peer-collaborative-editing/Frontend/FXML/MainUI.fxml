@@ -20,7 +20,7 @@
     </left>
 
     <center>
-        <TextArea fx:id="main_text">
+        <TextArea fx:id="main_text_area" onKeyPressed="#handleTextAreaInput">
 
         </TextArea>
     </center>

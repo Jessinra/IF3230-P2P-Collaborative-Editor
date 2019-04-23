@@ -14,7 +14,7 @@
     <menus>
         <Menu text="File">
             <items>
-                <MenuItem fx:id="file_new" text="New" />
+                <MenuItem fx:id="file_new" text="New" onAction="#createNewFile" />
                 <MenuItem fx:id="file_open" text="Open"/>
                 <MenuItem fx:id="file_save" text="Save"/>
                 <MenuItem fx:id="file_save_as" text="Save as"/>
