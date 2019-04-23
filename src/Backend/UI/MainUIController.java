@@ -15,31 +15,62 @@ public class MainUIController {
 
     public MainUIController(){
         cursorPosition = 0;
-        crdtController = new CRDTController("1");
+        crdtController = new CRDTController("Shandy");
+
+        Thread object = new Thread(() -> {
+            try {
+                System.out.println("Remote Thread running");
+
+                // Receive data from p2p then RemoteInsert/RemoteDelete
+            }
+            catch(Exception e){
+                System.out.println("Error on Remote Thread: " + e.getMessage());
+                System.out.println("Stack Trace: ");
+                e.getMessage();
+            }
+        });
+
+        object.start();
     }
 
     public void handleTextAreaInput(KeyEvent ev){
         // System.out.println("Keypress code: " + ev.getCode());
 
+        // Handle Arrow LEFT
         if(ev.getCode() == KeyCode.LEFT){
             decreaseCursorPosition(1);
             System.out.println("Left, cursorPosition: " + cursorPosition.toString());
         }
+        // Handle Arrow RIGHT
         else if(ev.getCode() == KeyCode.RIGHT){
             increaseCursorPosition(1);
             System.out.println("Right, cursorPosition: " + cursorPosition.toString());
         }
+        // Handle Arrow UP
         else if(ev.getCode() == KeyCode.UP){
             System.out.println("UP, cursorPosition: " + cursorPosition.toString());
         }
+        // Handle ARROW DOWN
         else if(ev.getCode() == KeyCode.DOWN){
             System.out.println("DOWN, cursorPosition: " + cursorPosition.toString());
         }
+        // Handle BackSpace
         else if(ev.getCode() == KeyCode.BACK_SPACE){
             crdtController.localDelete(cursorPosition-1);
             System.out.println(crdtController.getText());
             decreaseCursorPosition(1);
+            System.out.println("BACKSPACE, cursorPosition: " + cursorPosition.toString());
         }
+        // Handle Delete Button
+        else if(ev.getCode() == KeyCode.DELETE){
+            if(cursorPosition < crdtController.getTextContent().size()){
+                crdtController.localDelete(cursorPosition);
+                System.out.println(crdtController.getText());
+                System.out.println("BACKSPACE, cursorPosition: " + cursorPosition.toString());
+            }
+
+        }
+        // Handle Others
         else {
             crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
             increaseCursorPosition(1);
@@ -65,5 +96,6 @@ public class MainUIController {
         }
 
     }
+
 
 }
