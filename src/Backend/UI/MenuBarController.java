@@ -1,6 +1,5 @@
 package Backend.UI;
 
-import Frontend.Class.InputBox;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -14,7 +13,7 @@ public class MenuBarController {
 
 
     public void createNewFile(){
-        InputBox.display("Enter new file's name: ");
+
     }
 
     public void exitWindow(){

@@ -1,6 +1,7 @@
 package Backend.UI;
 
 import Backend.CRDT.CRDTController;
+import Frontend.Class.UsernameBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -14,6 +15,8 @@ public class MainUIController {
     private Integer WRAP_LENGTH = 125;
     private Integer cursorPosition;
     private Integer peersCount;
+    private String username;
+    private Color color;
     private CRDTController crdtController;
     @FXML private PeersController peersController;
     @FXML private TextArea main_text_area;
@@ -22,9 +25,16 @@ public class MainUIController {
         // Initialize Variables
         cursorPosition = 0;
         peersCount = 1;
+        username = "";
+        color = null;
+
+        // Show UsernameBox
+        UsernameBox.display("Peer2Peer Collaborative Editing");
+        username = UsernameBox.username;
+        color = UsernameBox.color;
 
         // Initialize Classes
-        crdtController = new CRDTController("Shandy");
+        crdtController = new CRDTController(username);
 
         // Create a thread for remote operations
         Thread object = new Thread(() -> {
@@ -48,7 +58,7 @@ public class MainUIController {
 
 
         // Initialize Peers
-        peersController.changePeer(1,crdtController.getClientId(), Color.AQUA);
+        peersController.changePeer(1,crdtController.getClientId(), color);
 
         // Handle Arrow LEFT
         if(ev.getCode() == KeyCode.LEFT){
