@@ -34,15 +34,23 @@ public class MainUIController implements IEditorCallback {
 
         // Initialize Classes & Lists
         crdtController = new CRDTController(username);
-        initializeNodeClient();
 
-        if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
-            nodeClient.sendJoinRequest(UsernameBox.ip_address, UsernameBox.port);
-        }
+        Thread nodeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initializeNodeClient();
+                if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
+                    nodeClient.sendJoinRequest(UsernameBox.ip_address, UsernameBox.port);
+                }
+            }
+        });
+
+        nodeThread.start();
     }
 
     private void initializeNodeClient() {
         this.nodeClient = new Node(this.username, this);
+        this.nodeClient.start();
     }
 
     public void handleTextAreaInput(KeyEvent ev) {
