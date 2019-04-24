@@ -10,6 +10,7 @@ public class CRDTController {
     private static final int maxCharIdx = 999999;
 
     private String clientId;
+    private int counter;
     private ArrayList<CRDTChar> textContent = new ArrayList<>();
     private ArrayList<CRDTLog> versionVector = new ArrayList<>();
 
@@ -19,6 +20,7 @@ public class CRDTController {
 
     public CRDTController(String clientId) {
         this.clientId = clientId;
+        counter = 0;
     }
 
     /* =================================================================
@@ -59,6 +61,7 @@ public class CRDTController {
     public CRDTChar localInsert(char value, int index) {
         CRDTChar newChar = this.generateCRDTChar(value, index);
         this.textContent.add(index, newChar);
+        counter++;
         this.versionVector.add(new CRDTLog(newChar, 1));
 
         return newChar;
@@ -67,6 +70,7 @@ public class CRDTController {
     public CRDTChar localDelete(int index) {
         CRDTChar deleted = this.textContent.get(index);
         this.textContent.remove(index);
+        counter++;
         this.versionVector.add(new CRDTLog(deleted, 0));
 
         return deleted;

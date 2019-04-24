@@ -35,4 +35,5 @@ public class CRDTLog {
     public boolean isUpdatedLocally() {
         return updatedLocally;
     }
+
 }
