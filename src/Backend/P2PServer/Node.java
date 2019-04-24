@@ -2,6 +2,8 @@ package Backend.P2PServer;
 
 import Backend.CRDT.CRDTLog;
 
+import java.util.ArrayList;
+
 /**
  * A node in a peer to peer network.
  * It composes two main sub-components: inBound and outBound.
@@ -29,15 +31,32 @@ public class Node implements IMessageCallback {
     private final int inBoundPort;
 
     /**
+     * Arraylist of peers connected to this node
+     */
+    private ArrayList<Peer> peerList = new ArrayList<>();
+
+    private String ipAddress;
+
+    /**
      * Instantiates a node object
      * @param inBoundPort The listening port
      * @param nodeId The identity of the node
      */
+    public Node(String ipAddress, int inBoundPort, String nodeId) {
+        this.inBound = new InBound(inBoundPort, this);
+        this.outBound = new OutBound();
+        this.nodeId = nodeId;
+        this.inBoundPort = inBoundPort;
+        this.ipAddress = ipAddress;
+    }
+
     public Node(int inBoundPort, String nodeId) {
         this.inBound = new InBound(inBoundPort, this);
         this.outBound = new OutBound();
         this.nodeId = nodeId;
         this.inBoundPort = inBoundPort;
+        // Cari IP Address komputer ini
+        //this.ipAddress =
     }
 
     /**
@@ -54,6 +73,7 @@ public class Node implements IMessageCallback {
         this.inBound.setIsOnline(false);
     }
 
+
     /**
      * Sends a message to a destination
      * @param msg The message to be sent
@@ -61,9 +81,16 @@ public class Node implements IMessageCallback {
      * @param port The destination port number
      */
     public void sendMessage(Message msg, String dest_addr, int port) {
-        System.out.println(nodeId + " is sending message to " + msg.getDestinationId());
-        this.outBound.send(dest_addr, port, msg);
+        for(Peer peer : peerList) {
+            System.out.println(nodeId + " is sending message to " + msg.getDestinationId());
+            this.outBound.send(peer.getIpAddr(), peer.getInboundPort(), msg);
+        }
     }
+
+    // TODO: Butuh local update yang mangggil sendrequest., interface buat ngirim message berisi CRDT Log
+    // TODO: onPeerJoin()
+    // TODO: onLocalUpdate()
+    // 2 2nya manggil sendMessage
 
     /**
      * Gets the ID of the node
@@ -81,17 +108,14 @@ public class Node implements IMessageCallback {
         return inBoundPort;
     }
 
-    @Override
-    public void messageReceived(String msg) {
-        String m = msg;
-        System.out.println(nodeId + " has received a msg: " + m);
-        if(m != null) {
-
-        }
+    private void sendJoinRequest(String ipAddress, int port) {
+        Peer requestingPeer = new Peer(ipAddress, nodeId, inBoundPort);
+        Message connectMessage = new Message(nodeId, requestingPeer);
+        outBound.send(ipAddress, port, connectMessage);
     }
 
     @Override
-    public void messageReceived(CRDTLog crdtLog) {
+    public void onMessageReceived(CRDTLog crdtLog) {
         // see properties of CRDT Log
         System.out.println("Operation: " + crdtLog.getOperation());
         System.out.println("CRDT Char");
@@ -100,5 +124,12 @@ public class Node implements IMessageCallback {
         System.out.println("WriterId : " + crdtLog.getUpdate().getWriterId());
         System.out.println("Timestamp: " + crdtLog.getUpdate().getTimeStamp());
         System.out.println("Local    : " + crdtLog.isUpdatedLocally());
+
+        // TODO : parse update operation, do remoteInsert / remoteDelete
+    }
+
+    @Override
+    public void onPeerConnectionReceived(Peer incomingPeer) {
+        peerList.add(incomingPeer);
     }
 }

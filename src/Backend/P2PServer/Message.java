@@ -36,9 +36,8 @@ public class Message implements Serializable {
      * @param destinationId The destination node's ID
      * @param message The message content
      */
-    public Message(String senderId, String destinationId, Object message) {
+    public Message(String senderId, Object message) {
         this.senderId = senderId;
-        this.destinationId = destinationId;
         this.message = message;
     }
 

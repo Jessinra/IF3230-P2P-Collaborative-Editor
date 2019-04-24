@@ -17,9 +17,9 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         //Creates a number of nodes to be used in the P2PServer network.
-        Node node1 = new Node(selectPortNumber(), "node1");
-        Node node2 = new Node(selectPortNumber(), "node2");
-        Node node3 = new Node(selectPortNumber(), "node3");
+        Node node1 = new Node("127.0.0.1", selectPortNumber(), "node1");
+        Node node2 = new Node("127.0.0.1", selectPortNumber(), "node2");
+        Node node3 = new Node("127.0.0.1", selectPortNumber(), "node3");
 
         //start nodes
         new Thread(node1::start).start();
@@ -33,7 +33,7 @@ public class Main {
         CRDTLog crdtLog = new CRDTLog(crdtChar, 0);
 
         //send messages
-        node1.sendMessage(new Message(node1.getNodeId(), node2.getNodeId(), crdtLog),
+        node1.sendMessage(new Message(node1.getNodeId(), crdtLog),
                 "127.0.0.1", node2.getInBoundPort());
         /*
         node2.sendMessage(new Message(node2.getNodeId(), node1.getNodeId(), "Hello my peer - from node2"),
