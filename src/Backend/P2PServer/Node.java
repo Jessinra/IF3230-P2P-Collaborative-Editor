@@ -7,6 +7,7 @@ import Backend.UI.IEditorCallback;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A node in a peer to peer network.
@@ -14,6 +15,9 @@ import java.util.ArrayList;
  * It also implements the message callback interface to enable notification of incoming messages.
  */
 public class Node implements IMessageCallback {
+
+    private static final List<Integer> ASSIGNED_PORTS = new ArrayList<>();
+
     /**
      * The inBound sub-component
      */
@@ -67,12 +71,13 @@ public class Node implements IMessageCallback {
 
     public Node(String nodeId, IEditorCallback editorCallback) {
         this.nodeId = nodeId;
-        this.inBoundPort = 8080;
+        this.inBoundPort = selectPortNumber();
 
         try{
             InetAddress localhost = InetAddress.getLocalHost();
             this.ipAddress = localhost.getHostAddress().trim();
             System.out.println("IP Address: " + this.ipAddress);
+            System.out.println("Port: " + this.inBoundPort);
         }
         catch(UnknownHostException e){
             System.out.println("Error on Node Constructor: " + e.getMessage());
@@ -175,7 +180,7 @@ public class Node implements IMessageCallback {
     }
 
     public void sendJoinRequest(String targetIpAddress, int targetPort) {
-        Peer requestingPeer = new Peer(this.ipAddress, this.nodeId, this.inBoundPort);
+        Peer requestingPeer = new ConnectingPeer(this.ipAddress, this.nodeId, this.inBoundPort);
         Message connectMessage = new Message(this.nodeId, requestingPeer);
         outBound.send(targetIpAddress, targetPort, connectMessage);
     }
@@ -232,5 +237,14 @@ public class Node implements IMessageCallback {
     public void onPeerReceived(Peer peer) {
         System.out.println(nodeId + " ---> " + peer.getNodeId());
         peerList.add(peer);
+    }
+
+    public static int selectPortNumber() {
+        int portNumber; //range is from 49152 -> 65532
+        do {
+            portNumber = 49152 + (int) (Math.random() * 16381);
+        } while (ASSIGNED_PORTS.contains(portNumber));
+        ASSIGNED_PORTS.add(portNumber);
+        return portNumber;
     }
 }
