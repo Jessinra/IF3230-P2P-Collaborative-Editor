@@ -24,7 +24,6 @@ public class MainUIController implements IEditorCallback {
     private String username;
     private int joinTargetPort;
 
-    private Color color;
     private CRDTController crdtController;
     private Queue<CRDTLog> deletion_buffer;
 
@@ -40,22 +39,16 @@ public class MainUIController implements IEditorCallback {
         username = UsernameBox.username;
         joinTargetPort = UsernameBox.port;
 
-        // TODO : random color
-        color = Color.AQUA;
-
-        // Initialize Classes
+        // Initialize Classes & Lists
+        
         crdtController = new CRDTController(username);
         initializeNodeClient();
 
         // Create a thread for remote operations
+        /*
         Thread object = new Thread(() -> {
             try {
                 System.out.println("Remote Thread running");
-
-                // Execute remote buffer
-                if(isInsertOperationExist(deletion_buffer.peek())){
-                    crdtController.remoteDelete(deletion_buffer.remove().getUpdate());
-                }
 
             } catch (Exception e) {
                 System.out.println("Error on Remote Thread: " + e.getMessage());
@@ -65,6 +58,7 @@ public class MainUIController implements IEditorCallback {
         });
 
         object.start();
+        */
     }
 
     public void initializeNodeClient() {
@@ -75,7 +69,7 @@ public class MainUIController implements IEditorCallback {
     public void handleTextAreaInput(KeyEvent ev) {
 
         // Initialize Peers
-        peersController.changePeer(1, crdtController.getClientId(), color);
+        peersController.changePeer(1, crdtController.getClientId());
         cursorPosition = main_text_area.getCaretPosition();
 
         if (ev.getCode().isMediaKey() ||
@@ -151,6 +145,10 @@ public class MainUIController implements IEditorCallback {
             crdtController.remoteInsert(crdtLog.getUpdate());
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
             addCRDTLogToDeletionBuffer(crdtLog);
+        }
+
+        if(!deletion_buffer.isEmpty() && isInsertOperationExist(deletion_buffer.peek())){
+            crdtController.remoteDelete(deletion_buffer.remove().getUpdate());
         }
     }
 

@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 
 public class UsernameBox {
 
+    public static String CREATE = "Create";
+    public static String JOIN = "Join";
+
     public static String submitType = "";
     public static String username;
     public static String ip_address;
@@ -50,8 +53,8 @@ public class UsernameBox {
         final ToggleGroup radioGroup = new ToggleGroup();
         // createRadio
         RadioButton createRadio = new RadioButton();
-        createRadio.setText("Create");
-        createRadio.setUserData("Create");
+        createRadio.setText(UsernameBox.CREATE);
+        createRadio.setUserData(UsernameBox.CREATE);
         createRadio.setToggleGroup(radioGroup);
         createRadio.setSelected(false);
         GridPane.setConstraints(createRadio, 10,3);
@@ -59,8 +62,8 @@ public class UsernameBox {
 
         // joinRadio
         RadioButton joinRadio = new RadioButton();
-        joinRadio.setText("Join");
-        joinRadio.setUserData("Join");
+        joinRadio.setText(UsernameBox.JOIN);
+        joinRadio.setUserData(UsernameBox.JOIN);
         joinRadio.setToggleGroup(radioGroup);
         joinRadio.setSelected(true);
         GridPane.setConstraints(joinRadio, 10, 3);
@@ -75,7 +78,7 @@ public class UsernameBox {
                     submitType = radioGroup.getSelectedToggle().getUserData().toString();
                     System.out.println("submitType: " + submitType);
 
-                    if(submitType.equals("Create")){
+                    if(submitType.equals(UsernameBox.CREATE)){
                         ipTextField.clear();
                         portTextField.clear();
                         ipTextField.setDisable(true);
@@ -94,12 +97,18 @@ public class UsernameBox {
         // Button
         Button submitButton = new Button("GO!");
         submitButton.setOnAction(e -> {
-            if(!usernameTextField.getText().isEmpty()){
+            if(submitType.equals(UsernameBox.CREATE) && !usernameTextField.getText().isEmpty()){
+                username = usernameTextField.getText();
+            }
+            else if(submitType.equals(UsernameBox.JOIN) && !usernameTextField.getText().isEmpty() &&
+                    !ipTextField.getText().isEmpty() && !portTextField.getText().isEmpty()){
+
                 username = usernameTextField.getText();
                 ip_address = ipTextField.getText();
                 port = Integer.parseInt(portTextField.getText());
-                window.close();
             }
+
+            window.close();
         });
         GridPane.setConstraints(submitButton, 10, 4);
         GridPane.setHalignment(submitButton, HPos.CENTER);

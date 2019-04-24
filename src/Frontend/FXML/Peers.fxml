@@ -14,10 +14,10 @@
 
     <Label text="Peers: "/>
 
-    <fx:include fx:id="peer1" source="PeerBox.fxml"/>
-    <fx:include fx:id="peer2" source="PeerBox.fxml"/>
-    <fx:include fx:id="peer3" source="PeerBox.fxml"/>
-    <fx:include fx:id="peer4" source="PeerBox.fxml"/>
-    <fx:include fx:id="peer5" source="PeerBox.fxml"/>
+    <Label fx:id="peer1" />
+    <Label fx:id="peer2" />
+    <Label fx:id="peer3" />
+    <Label fx:id="peer4" />
+    <Label fx:id="peer5" />
 
 </VBox>

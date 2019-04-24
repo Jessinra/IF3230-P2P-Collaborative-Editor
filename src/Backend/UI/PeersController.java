@@ -16,12 +16,13 @@ public class PeersController {
     @FXML private Label label1;
     @FXML private Button button1;
 
-    // PeerBoxControllers
-    @FXML private PeerBoxController peer1Controller;
-    @FXML private PeerBoxController peer2Controller;
-    @FXML private PeerBoxController peer3Controller;
-    @FXML private PeerBoxController peer4Controller;
-    @FXML private PeerBoxController peer5Controller;
+    // Labels
+    @FXML private Label peer1;
+    @FXML private Label peer2;
+    @FXML private Label peer3;
+    @FXML private Label peer4;
+    @FXML private Label peer5;
+
 
     double computeTextWidth(Font font, String text, double wrappingWidth) {
         Text helper = new Text();
@@ -37,39 +38,24 @@ public class PeersController {
         return textWidth;
     }
 
-    public void changePeer(int num, String text_label, Color color){
+    public void changePeer(int num, String text_label){
         Text temp = new Text(text_label);
         double text_label_width;
         switch (num){
             case 1:
-                peer1Controller.setRectangleColor(color);
-                peer1Controller.setLabelText(text_label);
-                text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peer1Controller.setRectangleSize(text_label_width,20);
+                peer1.setText(text_label);
                 break;
             case 2:
-                peer2Controller.setRectangleColor(color);
-                peer2Controller.setLabelText(text_label);
-                text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peer2Controller.setRectangleSize(text_label_width,20);
+                peer2.setText(text_label);
                 break;
             case 3:
-                peer3Controller.setRectangleColor(color);
-                peer3Controller.setLabelText(text_label);
-                text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peer3Controller.setRectangleSize(text_label_width,20);
+                peer3.setText(text_label);
                 break;
             case 4:
-                peer4Controller.setRectangleColor(color);
-                peer4Controller.setLabelText(text_label);
-                text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peer4Controller.setRectangleSize(text_label_width,20);
+                peer4.setText(text_label);
                 break;
             case 5:
-                peer5Controller.setRectangleColor(color);
-                peer5Controller.setLabelText(text_label);
-                text_label_width = computeTextWidth(temp.getFont(), text_label, temp.getWrappingWidth());
-                peer5Controller.setRectangleSize(text_label_width,20);
+                peer5.setText(text_label);
                 break;
             default:
                 break;
