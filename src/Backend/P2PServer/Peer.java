@@ -35,4 +35,8 @@ public class Peer implements Serializable {
         Peer o = (Peer) obj;
         return this.ipAddr.equals(o.ipAddr) && this.nodeId.equals(o.nodeId) && this.inboundPort == o.inboundPort;
     }
+
+    public String toString() {
+        return ipAddr + " : " + inboundPort + " : " + nodeId;
+    }
 }

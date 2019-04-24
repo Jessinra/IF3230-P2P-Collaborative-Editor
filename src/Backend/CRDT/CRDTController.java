@@ -66,16 +66,16 @@ public class CRDTController implements Serializable {
 
     public CRDTChar localInsert(char value, int index) {
         CRDTChar newChar = this.generateCRDTChar(value, index);
-        this.textContent.add(index, newChar);
-        this.versionVector.add(new CRDTLog(newChar, CRDTLog.INSERT));
+//        this.textContent.add(index, newChar);
+//        this.versionVector.add(new CRDTLog(newChar, CRDTLog.INSERT));
 
         return newChar;
     }
 
     public CRDTChar localDelete(int index) {
         CRDTChar deleted = this.textContent.get(index);
-        this.textContent.remove(index);
-        this.versionVector.add(new CRDTLog(deleted, CRDTLog.DELETE));
+//        this.textContent.remove(index);
+//        this.versionVector.add(new CRDTLog(deleted, CRDTLog.DELETE));
 
         return deleted;
     }

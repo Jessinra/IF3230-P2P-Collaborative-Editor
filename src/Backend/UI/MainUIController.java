@@ -93,9 +93,6 @@ public class MainUIController implements IEditorCallback {
             CRDTChar updatedChar = crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
             nodeClient.broadcastLocalInsert(updatedChar);
         }
-
-        System.out.println("========");
-        System.out.println(crdtController.getText());
     }
 
     public void resetCursor() {
@@ -103,15 +100,25 @@ public class MainUIController implements IEditorCallback {
         System.out.println("Clicked Back, cursorPosition: " + cursorPosition.toString());
     }
 
+    private void refreshUI() {
+        int prevPosition = main_text_area.getCaretPosition();
+        main_text_area.setText(crdtController.getText());
+        main_text_area.positionCaret(prevPosition);
+
+        System.out.println(crdtController.getText());
+    }
+
     @Override
     public void onRemoteUpdate(CRDTLog crdtLog) {
+
         if (crdtLog.getOperation() == CRDTLog.INSERT) {
             crdtController.remoteInsert(crdtLog.getUpdate());
-            main_text_area.setText(crdtController.getText());
 
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
             crdtController.addCRDTLogToDeletionBuffer(crdtLog);
         }
+
+        refreshUI();
 
         if (crdtController.getDeletionBuffer().isEmpty()) {
             return;
@@ -120,6 +127,8 @@ public class MainUIController implements IEditorCallback {
         if (crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().get(0))) {
             crdtController.remoteDelete(crdtController.getDeletionBuffer().remove(0).getUpdate());
         }
+
+        refreshUI();
     }
 
     @Override
@@ -139,6 +148,8 @@ public class MainUIController implements IEditorCallback {
         // TODO : verify this
         Message snapshotMsg = new Message(this.username, this.crdtController);
         nodeClient.sendMessage(snapshotMsg, incomingPeer);
+
+        System.out.println(nodeClient.getPeerList());
     }
 
     @Override

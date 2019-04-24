@@ -26,7 +26,8 @@ class OutBound {
             outputStream.writeObject(message);
 
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println(e.toString());
         }
     }
 }
