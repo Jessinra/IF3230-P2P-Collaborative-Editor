@@ -90,6 +90,7 @@ public class Node implements IMessageCallback {
     // TODO: Butuh local update yang mangggil sendrequest., interface buat ngirim message berisi CRDT Log
     // TODO: onPeerJoin()
     // TODO: onLocalUpdate()
+    // TODO: sendOnMessageReceived()
     // 2 2nya manggil sendMessage
 
     /**
@@ -124,8 +125,7 @@ public class Node implements IMessageCallback {
         System.out.println("WriterId : " + crdtLog.getUpdate().getWriterId());
         System.out.println("Timestamp: " + crdtLog.getUpdate().getTimeStamp());
         System.out.println("Local    : " + crdtLog.isUpdatedLocally());
-
-        // TODO : parse update operation, do remoteInsert / remoteDelete
+        // ada callback yang terima CRDT Log
     }
 
     @Override
