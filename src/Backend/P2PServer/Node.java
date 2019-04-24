@@ -1,6 +1,7 @@
 package Backend.P2PServer;
 
 import Backend.CRDT.CRDTLog;
+import Backend.UI.IEditorCallback;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,11 @@ public class Node implements IMessageCallback {
     private final String nodeId;
 
     /**
+     * This IP address for listening incoming messages
+     */
+    private String ipAddress;
+
+    /**
      * The port for listening for in-coming messages
      */
     private final int inBoundPort;
@@ -35,28 +41,38 @@ public class Node implements IMessageCallback {
      */
     private ArrayList<Peer> peerList = new ArrayList<>();
 
-    private String ipAddress;
+    private IEditorCallback editorCallback;
+
 
     /**
      * Instantiates a node object
-     * @param inBoundPort The listening port
      * @param nodeId The identity of the node
+     * @param inBoundPort The listening port
+     * @param editorCallback callback function from text editor
      */
-    public Node(String ipAddress, int inBoundPort, String nodeId) {
+    public Node(String nodeId, String ipAddress, int inBoundPort, IEditorCallback editorCallback) {
+
+        this.nodeId = nodeId;
+        this.ipAddress = ipAddress;
+        this.inBoundPort = inBoundPort;
+
         this.inBound = new InBound(inBoundPort, this);
         this.outBound = new OutBound();
-        this.nodeId = nodeId;
-        this.inBoundPort = inBoundPort;
-        this.ipAddress = ipAddress;
+
+        this.editorCallback = editorCallback;
     }
 
-    public Node(int inBoundPort, String nodeId) {
-        this.inBound = new InBound(inBoundPort, this);
-        this.outBound = new OutBound();
+    public Node(String nodeId, IEditorCallback editorCallback) {
+
         this.nodeId = nodeId;
-        this.inBoundPort = inBoundPort;
-        // Cari IP Address komputer ini
-        //this.ipAddress =
+        this.inBoundPort = 8080;
+        // TODO : Cari IP Address komputer ini
+        // this.ipAddress =
+
+        this.inBound = new InBound(this.inBoundPort, this);
+        this.outBound = new OutBound();
+
+        this.editorCallback = editorCallback;
     }
 
     /**
@@ -87,12 +103,6 @@ public class Node implements IMessageCallback {
         }
     }
 
-    // TODO: Butuh local update yang mangggil sendrequest., interface buat ngirim message berisi CRDT Log
-    // TODO: onPeerJoin()
-    // TODO: onLocalUpdate()
-    // TODO: sendOnMessageReceived()
-    // 2 2nya manggil sendMessage
-
     /**
      * Gets the ID of the node
      * @return The node ID
@@ -109,27 +119,29 @@ public class Node implements IMessageCallback {
         return inBoundPort;
     }
 
-    private void sendJoinRequest(String ipAddress, int port) {
-        Peer requestingPeer = new Peer(ipAddress, nodeId, inBoundPort);
-        Message connectMessage = new Message(nodeId, requestingPeer);
-        outBound.send(ipAddress, port, connectMessage);
+    private void sendJoinRequest(String targetIpAddress, int targetPort) {
+        Peer requestingPeer = new Peer(targetIpAddress, this.nodeId, this.inBoundPort);
+        Message connectMessage = new Message(this.nodeId, requestingPeer);
+        outBound.send(targetIpAddress, targetPort, connectMessage);
     }
 
     @Override
     public void onMessageReceived(CRDTLog crdtLog) {
-        // see properties of CRDT Log
-        System.out.println("Operation: " + crdtLog.getOperation());
-        System.out.println("CRDT Char");
-        System.out.println("Position : " + crdtLog.getUpdate().getPosition());
-        System.out.println("Value    : " + crdtLog.getUpdate().getValue());
-        System.out.println("WriterId : " + crdtLog.getUpdate().getWriterId());
-        System.out.println("Timestamp: " + crdtLog.getUpdate().getTimeStamp());
-        System.out.println("Local    : " + crdtLog.isUpdatedLocally());
-        // ada callback yang terima CRDT Log
+//        // see properties of CRDT Log
+//        System.out.println("Operation: " + crdtLog.getOperation());
+//        System.out.println("CRDT Char");
+//        System.out.println("Position : " + crdtLog.getUpdate().getPosition());
+//        System.out.println("Value    : " + crdtLog.getUpdate().getValue());
+//        System.out.println("WriterId : " + crdtLog.getUpdate().getWriterId());
+//        System.out.println("Timestamp: " + crdtLog.getUpdate().getTimeStamp());
+//        System.out.println("Local    : " + crdtLog.isUpdatedLocally());
+
+        editorCallback.onRemoteUpdate(crdtLog);
     }
 
     @Override
     public void onPeerConnectionReceived(Peer incomingPeer) {
         peerList.add(incomingPeer);
+        editorCallback.onPeerJoined(incomingPeer);
     }
 }

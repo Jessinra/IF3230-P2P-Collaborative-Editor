@@ -1,8 +1,10 @@
 package Backend.UI;
 
-import Backend.CRDT.CRDTController;
 import Backend.CRDT.CRDTChar;
+import Backend.CRDT.CRDTController;
 import Backend.CRDT.CRDTLog;
+import Backend.P2PServer.Node;
+import Backend.P2PServer.Peer;
 import Frontend.Class.UsernameBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -12,33 +14,37 @@ import javafx.scene.paint.Color;
 
 import java.util.Queue;
 
-public class MainUIController {
+public class MainUIController implements IEditorCallback {
 
     private Integer WRAP_LENGTH = 125;
-    private Integer cursorPosition;
-    private Integer peersCount;
+    private Integer cursorPosition = 0;
+    private Integer peersCount = 1;
+
     private String username;
+    private int joinTargetPort;
+
     private Color color;
     private CRDTController crdtController;
     private Queue<CRDTChar> deletion_buffer;
+
     @FXML private PeersController peersController;
     @FXML private TextArea main_text_area;
 
+    private Node nodeClient;
+
     public MainUIController() {
-        // Initialize Variables
-        cursorPosition = 0;
-        peersCount = 1;
-        username = "";
-        color = null;
 
         // Show UsernameBox
         UsernameBox.display("Peer2Peer Collaborative Editing");
         username = UsernameBox.username;
+        joinTargetPort = UsernameBox.port;
+
+        // TODO : random color
         color = Color.AQUA;
 
         // Initialize Classes
         crdtController = new CRDTController(username);
-
+        initializeNodeClient();
 
         // Create a thread for remote operations
         Thread object = new Thread(() -> {
@@ -64,6 +70,19 @@ public class MainUIController {
         });
 
         object.start();
+    }
+
+    public void initializeNodeClient() {
+        // TODO initialize
+        this.nodeClient = new Node(this.username, this);
+    }
+
+    public void onRemoteUpdateReceived() {
+        // TODO : implement this
+    }
+
+    public void onPeerJoinRequestReceived() {
+        // TODO: implement this
     }
 
     public void handleTextAreaInput(KeyEvent ev) {
@@ -129,5 +148,20 @@ public class MainUIController {
         }
 
         return isExist;
+    }
+
+    @Override
+    public void onRemoteUpdate(CRDTLog crdtLog) {
+        // TODO
+        // check for type
+        // do the remoteInsert / remoteDelete
+        // insert into version vector
+    }
+
+    @Override
+    public void onPeerJoined(Peer incomingPeer) {
+        // TODO
+        // share the peer list
+        // share the current log
     }
 }

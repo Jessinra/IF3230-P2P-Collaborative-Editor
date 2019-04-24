@@ -17,7 +17,7 @@ public class UsernameBox {
     public static String submitType = "";
     public static String username;
     public static String ip_address;
-    public static String port;
+    public static int port;
 
     public static void display(String title){
         Stage window = new Stage();
@@ -97,7 +97,7 @@ public class UsernameBox {
             if(!usernameTextField.getText().isEmpty()){
                 username = usernameTextField.getText();
                 ip_address = ipTextField.getText();
-                port = portTextField.getText();
+                port = Integer.parseInt(portTextField.getText());
                 window.close();
             }
         });
