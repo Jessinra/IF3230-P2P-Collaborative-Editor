@@ -16,32 +16,32 @@ import javafx.scene.input.KeyEvent;
 public class MainUIController implements IEditorCallback {
 
     private Integer cursorPosition = 0;
-
     private String username;
-    private int joinTargetPort;
-
     private CRDTController crdtController;
+    private Node nodeClient;
 
     @FXML
     private PeersController peersController;
     @FXML
     private TextArea main_text_area;
 
-    private Node nodeClient;
 
     public MainUIController() {
 
         // Show UsernameBox
         UsernameBox.display("Peer2Peer Collaborative Editing");
         username = UsernameBox.username;
-        joinTargetPort = UsernameBox.port;
 
         // Initialize Classes & Lists
         crdtController = new CRDTController(username);
         initializeNodeClient();
+
+        if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
+            nodeClient.sendJoinRequest(UsernameBox.ip_address, UsernameBox.port);
+        }
     }
 
-    public void initializeNodeClient() {
+    private void initializeNodeClient() {
         this.nodeClient = new Node(this.username, this);
     }
 
@@ -98,14 +98,19 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onRemoteUpdate(CRDTLog crdtLog) {
+
         if (crdtLog.getOperation() == CRDTLog.INSERT) {
             crdtController.remoteInsert(crdtLog.getUpdate());
+
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
             crdtController.addCRDTLogToDeletionBuffer(crdtLog);
         }
 
-        if (!crdtController.getDeletionBuffer().isEmpty() &&
-                crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().get(0))) {
+        if (crdtController.getDeletionBuffer().isEmpty()) {
+            return;
+        }
+
+        if (crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().get(0))) {
             crdtController.remoteDelete(crdtController.getDeletionBuffer().remove(0).getUpdate());
         }
     }
@@ -121,5 +126,8 @@ public class MainUIController implements IEditorCallback {
 
         Message newPeerInfo = new Message(this.username, incomingPeer);
         nodeClient.broadcastMessage(newPeerInfo);
+
+
+        // TODO sync snapshot
     }
 }

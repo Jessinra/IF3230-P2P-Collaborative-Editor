@@ -17,7 +17,7 @@ public class UsernameBox {
     public static String CREATE = "Create";
     public static String JOIN = "Join";
 
-    public static String submitType = "";
+    public static String submitType = UsernameBox.JOIN;
     public static String username;
     public static String ip_address;
     public static int port;
