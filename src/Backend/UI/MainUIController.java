@@ -12,7 +12,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.util.Queue;
 
 public class MainUIController implements IEditorCallback {
 
@@ -22,7 +21,6 @@ public class MainUIController implements IEditorCallback {
     private int joinTargetPort;
 
     private CRDTController crdtController;
-    private Queue<CRDTLog> deletion_buffer;
 
     @FXML
     private PeersController peersController;
@@ -98,32 +96,17 @@ public class MainUIController implements IEditorCallback {
         System.out.println("Clicked Back, cursorPosition: " + cursorPosition.toString());
     }
 
-    private void addCRDTLogToDeletionBuffer(CRDTLog crdtLog) {
-        deletion_buffer.add(crdtLog);
-    }
-
-
-
-    private Boolean isInsertOperationExist(CRDTLog crdtLog) {
-        for (CRDTLog log : crdtController.getVersionVector()) {
-            if (log.getOperation() == CRDTLog.INSERT &&
-                    log.getUpdate().deepEquals(crdtLog.getUpdate())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public void onRemoteUpdate(CRDTLog crdtLog) {
         if (crdtLog.getOperation() == CRDTLog.INSERT) {
             crdtController.remoteInsert(crdtLog.getUpdate());
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
-            addCRDTLogToDeletionBuffer(crdtLog);
+            crdtController.addCRDTLogToDeletionBuffer(crdtLog);
         }
 
-        if (!deletion_buffer.isEmpty() && isInsertOperationExist(deletion_buffer.peek())) {
-            crdtController.remoteDelete(deletion_buffer.remove().getUpdate());
+        if (!crdtController.getDeletionBuffer().isEmpty() &&
+                crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().peek())) {
+            crdtController.remoteDelete(crdtController.getDeletionBuffer().remove().getUpdate());
         }
     }
 

@@ -2,6 +2,7 @@ package Backend.CRDT;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import static java.lang.Integer.max;
 
@@ -13,6 +14,7 @@ public class CRDTController {
     private int counter;
     private ArrayList<CRDTChar> textContent = new ArrayList<>();
     private ArrayList<CRDTLog> versionVector = new ArrayList<>();
+    private Queue<CRDTLog> deletionBuffer;
 
     /* =================================================================
                                 Constructor
@@ -54,6 +56,11 @@ public class CRDTController {
     public void setVersionVector(ArrayList<CRDTLog> versionVector) {
         this.versionVector = versionVector;
     }
+
+    public Queue<CRDTLog> getDeletionBuffer(){ return deletionBuffer; }
+
+    public void setDeletionBuffer(Queue<CRDTLog> deletion_buffer) { this.deletionBuffer = deletion_buffer; }
+
     /* =================================================================
                               Public API call
     ================================================================= */
@@ -112,6 +119,21 @@ public class CRDTController {
             return null;
         }
     }
+
+    public void addCRDTLogToDeletionBuffer(CRDTLog crdtLog) {
+        deletionBuffer.add(crdtLog);
+    }
+
+    public Boolean isInsertOperationExist(CRDTLog crdtLog) {
+        for (CRDTLog log : versionVector) {
+            if (log.getOperation() == CRDTLog.INSERT &&
+                    log.getUpdate().deepEquals(crdtLog.getUpdate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void resetText() {
         this.textContent.clear();
@@ -266,4 +288,5 @@ public class CRDTController {
         // Insert as last
         return this.textContent.size();
     }
+
 }
