@@ -65,7 +65,7 @@ public class MainUIController implements IEditorCallback {
         else if (ev.getCode() == KeyCode.BACK_SPACE) {
             if (cursorPosition > 0) {
                 CRDTChar updatedChar = crdtController.localDelete(cursorPosition - 1);
-                broadcastLocalDelete(updatedChar);
+                nodeClient.broadcastLocalDelete(updatedChar);
             }
         }
 
@@ -73,20 +73,20 @@ public class MainUIController implements IEditorCallback {
         else if (ev.getCode() == KeyCode.DELETE) {
             if (cursorPosition < crdtController.getTextContent().size()) {
                 CRDTChar updatedChar = crdtController.localDelete(cursorPosition);
-                broadcastLocalDelete(updatedChar);
+                nodeClient.broadcastLocalDelete(updatedChar);
             }
         }
 
         // 'Enter' is kinda different from other whitespace, so to print out , need \n instead of normal enter key
         else if (ev.getCode() == KeyCode.ENTER) {
             CRDTChar updatedChar = crdtController.localInsert('\n', cursorPosition);
-            broadcastLocalInsert(updatedChar);
+            nodeClient.broadcastLocalInsert(updatedChar);
         }
 
         // Insert letter
         else {
             CRDTChar updatedChar = crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
-            broadcastLocalInsert(updatedChar);
+            nodeClient.broadcastLocalInsert(updatedChar);
         }
 
         System.out.println("========");
@@ -102,17 +102,7 @@ public class MainUIController implements IEditorCallback {
         deletion_buffer.add(crdtLog);
     }
 
-    private void broadcastLocalInsert(CRDTChar updateChar) {
-        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.INSERT);
-        Message updateMessage = new Message(this.username, remoteUpdateMessage);
-        nodeClient.broadcastMessage(updateMessage);
-    }
 
-    private void broadcastLocalDelete(CRDTChar updateChar) {
-        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.DELETE);
-        Message updateMessage = new Message(this.username, remoteUpdateMessage);
-        nodeClient.broadcastMessage(updateMessage);
-    }
 
     private Boolean isInsertOperationExist(CRDTLog crdtLog) {
         for (CRDTLog log : crdtController.getVersionVector()) {
