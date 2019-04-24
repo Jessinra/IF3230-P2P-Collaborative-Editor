@@ -1,19 +1,22 @@
-package Backend.P2P;
+package Backend.P2PServer;
+
+import Backend.CRDT.CRDTChar;
+import Backend.CRDT.CRDTLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simulates a P2P network.
+ * Simulates a P2PServer network.
  */
-public class Peer2PeerNet {
+public class Main {
     /**
      * Keeps a list of assigned port numbers to avoid port number conflicts during simulation.
      */
     private static final List<Integer> ASSIGNED_PORTS = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
-        //Creates a number of nodes to be used in the P2P network.
+        //Creates a number of nodes to be used in the P2PServer network.
         Node node1 = new Node(selectPortNumber(), "node1");
         Node node2 = new Node(selectPortNumber(), "node2");
         Node node3 = new Node(selectPortNumber(), "node3");
@@ -26,16 +29,20 @@ public class Peer2PeerNet {
         //wait for network to be ready
         Thread.sleep(1000);
 
+        CRDTChar crdtChar = new CRDTChar(node1.getNodeId(), 'a');
+        CRDTLog crdtLog = new CRDTLog(crdtChar, 0);
+
         //send messages
-        node1.sendMessage(new Message(node1.getNodeId(), node2.getNodeId(), "Hello my peer - from node1"),
+        node1.sendMessage(new Message(node1.getNodeId(), node2.getNodeId(), crdtLog),
                 "127.0.0.1", node2.getInBoundPort());
+        /*
         node2.sendMessage(new Message(node2.getNodeId(), node1.getNodeId(), "Hello my peer - from node2"),
                 "127.0.0.1", node1.getInBoundPort());
         node1.sendMessage(new Message(node1.getNodeId(), node3.getNodeId(), "Hello my peer - from node1"),
                 "127.0.0.1", node3.getInBoundPort());
         node3.sendMessage(new Message(node3.getNodeId(), node2.getNodeId(), "Hello my peer - from node3"),
                 "127.0.0.1", node2.getInBoundPort());
-
+        */
         // infinite loop to keep the network running. Can be altered as desired.
         while (true) ;
 

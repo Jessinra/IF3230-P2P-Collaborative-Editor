@@ -1,6 +1,8 @@
 package Backend.CRDT;
 
-public class CRDTLog {
+import java.io.Serializable;
+
+public class CRDTLog implements Serializable {
 
     private CRDTChar update;
     private int operation;

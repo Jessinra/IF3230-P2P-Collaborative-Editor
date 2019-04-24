@@ -1,10 +1,11 @@
 package Backend.CRDT;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class CRDTChar {
+public class CRDTChar implements Serializable {
 
     private long timeStamp;
     private String writerId;

@@ -1,4 +1,6 @@
-package Backend.P2P;
+package Backend.P2PServer;
+
+import Backend.CRDT.CRDTLog;
 
 /**
  * A node in a peer to peer network.
@@ -60,7 +62,7 @@ public class Node implements IMessageCallback {
      */
     public void sendMessage(Message msg, String dest_addr, int port) {
         System.out.println(nodeId + " is sending message to " + msg.getDestinationId());
-        this.outBound.send(dest_addr, port, msg.toString());
+        this.outBound.send(dest_addr, port, msg);
     }
 
     /**
@@ -86,5 +88,17 @@ public class Node implements IMessageCallback {
         if(m != null) {
 
         }
+    }
+
+    @Override
+    public void messageReceived(CRDTLog crdtLog) {
+        // see properties of CRDT Log
+        System.out.println("Operation: " + crdtLog.getOperation());
+        System.out.println("CRDT Char");
+        System.out.println("Position : " + crdtLog.getUpdate().getPosition());
+        System.out.println("Value    : " + crdtLog.getUpdate().getValue());
+        System.out.println("WriterId : " + crdtLog.getUpdate().getWriterId());
+        System.out.println("Timestamp: " + crdtLog.getUpdate().getTimeStamp());
+        System.out.println("Local    : " + crdtLog.isUpdatedLocally());
     }
 }

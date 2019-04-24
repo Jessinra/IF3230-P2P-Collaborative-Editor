@@ -1,8 +1,11 @@
-package Backend.P2P;
+package Backend.P2PServer;
+
+import Backend.CRDT.CRDTLog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 
 /**
@@ -21,6 +24,7 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
+        /*
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -28,6 +32,15 @@ public class ConnectionHandler implements Runnable {
             }
             this.socket.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+        Message message = null;
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            message = (Message) objectInputStream.readObject();
+            callback.messageReceived((CRDTLog) message.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

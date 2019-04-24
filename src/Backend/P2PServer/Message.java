@@ -1,11 +1,13 @@
-package Backend.P2P;
+package Backend.P2PServer;
 
+
+import java.io.Serializable;
 
 /**
  * A Plain Old Java Object (POJO) for facilitating serializing and de-serializing a message object.
  */
 
-public class Message {
+public class Message implements Serializable {
     /**
      * The ID of the originator of the message
      */
@@ -69,7 +71,7 @@ public class Message {
         return "Message{" +
                 "senderId='" + senderId + '\'' +
                 ", destinationId='" + destinationId + '\'' +
-                ", message=" + message +
+                ", message=" + message.toString() +
                 '}';
     }
 }

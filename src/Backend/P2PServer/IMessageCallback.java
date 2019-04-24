@@ -1,4 +1,6 @@
-package Backend.P2P;
+package Backend.P2PServer;
+
+import Backend.CRDT.CRDTLog;
 
 /**
  * Interface for facilitating notification of received messages in the in-Bound sub-component of a node.
@@ -12,4 +14,6 @@ public interface IMessageCallback {
     default void messageReceived(String msg){
         System.out.println("Received: "+msg);
     }
+
+    abstract void messageReceived(CRDTLog crdtLog);
 }
