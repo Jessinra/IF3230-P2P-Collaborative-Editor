@@ -1,5 +1,6 @@
 package Backend.P2PServer;
 
+import Backend.CRDT.CRDTChar;
 import Backend.CRDT.CRDTLog;
 import Backend.UI.IEditorCallback;
 
@@ -89,6 +90,17 @@ public class Node implements IMessageCallback {
         this.inBound.setIsOnline(false);
     }
 
+    public void broadcastLocalInsert(CRDTChar updateChar) {
+        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.INSERT);
+        Message updateMessage = new Message(this.nodeId, remoteUpdateMessage);
+        broadcastMessage(updateMessage);
+    }
+
+    public void broadcastLocalDelete(CRDTChar updateChar) {
+        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.DELETE);
+        Message updateMessage = new Message(this.nodeId, remoteUpdateMessage);
+        broadcastMessage(updateMessage);
+    }
 
     public void broadcastMessage(Message msg) {
         for (Peer peer : peerList) {

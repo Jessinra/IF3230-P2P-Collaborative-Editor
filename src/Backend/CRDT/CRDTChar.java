@@ -95,5 +95,9 @@ public class CRDTChar implements Serializable {
                 this.value == o.getValue() &&
                 Arrays.equals(this.position.toArray(), o.getPosition().toArray());
     }
+
+    public boolean deepEquals(CRDTChar obj) {
+        return equals(obj) && this.timeStamp == obj.timeStamp;
+    }
 }
 
