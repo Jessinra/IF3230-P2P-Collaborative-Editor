@@ -36,6 +36,7 @@ public class Node implements IMessageCallback {
      */
     private final int inBoundPort;
 
+
     /**
      * Arraylist of peers connected to this node
      */
@@ -117,6 +118,14 @@ public class Node implements IMessageCallback {
      */
     public int getInBoundPort() {
         return inBoundPort;
+    }
+
+    public ArrayList<Peer> getPeerList() {
+        return peerList;
+    }
+
+    public int getPeerCount() {
+        return peerList.size();
     }
 
     private void sendJoinRequest(String targetIpAddress, int targetPort) {

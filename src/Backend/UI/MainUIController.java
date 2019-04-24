@@ -16,9 +16,7 @@ import java.util.Queue;
 
 public class MainUIController implements IEditorCallback {
 
-    private Integer WRAP_LENGTH = 125;
     private Integer cursorPosition = 0;
-    private Integer peersCount = 1;
 
     private String username;
     private int joinTargetPort;
