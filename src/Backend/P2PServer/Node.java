@@ -4,6 +4,8 @@ import Backend.CRDT.CRDTChar;
 import Backend.CRDT.CRDTLog;
 import Backend.UI.IEditorCallback;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -64,16 +66,25 @@ public class Node implements IMessageCallback {
     }
 
     public Node(String nodeId, IEditorCallback editorCallback) {
-
         this.nodeId = nodeId;
         this.inBoundPort = 8080;
-        // TODO : Cari IP Address komputer ini
-        // this.ipAddress =
+
+        try{
+            InetAddress localhost = InetAddress.getLocalHost();
+            this.ipAddress = localhost.getHostAddress().trim();
+            System.out.println("IP Address: " + this.ipAddress);
+        }
+        catch(UnknownHostException e){
+            System.out.println("Error on Node Constructor: " + e.getMessage());
+            System.out.println("Stack Trace: ");
+            e.printStackTrace();
+        }
 
         this.inBound = new InBound(this.inBoundPort, this);
         this.outBound = new OutBound();
 
         this.editorCallback = editorCallback;
+
     }
 
     /**

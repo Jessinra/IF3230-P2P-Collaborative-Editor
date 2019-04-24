@@ -127,7 +127,6 @@ public class MainUIController implements IEditorCallback {
         Message newPeerInfo = new Message(this.username, incomingPeer);
         nodeClient.broadcastMessage(newPeerInfo);
 
-
         // TODO sync snapshot
     }
 }
