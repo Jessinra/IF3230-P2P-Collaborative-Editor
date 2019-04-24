@@ -97,7 +97,7 @@ public class MainUIController implements IEditorCallback {
 
     public void resetCursor() {
         cursorPosition = main_text_area.getCaretPosition();
-        System.out.println("Clicked Back, cursorPosition: " + cursorPosition.toString());
+        refreshUI();
     }
 
     private void refreshUI() {
@@ -157,6 +157,7 @@ public class MainUIController implements IEditorCallback {
 
         if (this.crdtController.getVersionVector().size() < snapshot.getVersionVector().size()) {
             this.crdtController = snapshot;
+            refreshUI();
         }
     }
 }
