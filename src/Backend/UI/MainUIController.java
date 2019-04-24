@@ -34,7 +34,7 @@ public class MainUIController {
         // Show UsernameBox
         UsernameBox.display("Peer2Peer Collaborative Editing");
         username = UsernameBox.username;
-        color = UsernameBox.color;
+        color = Color.AQUA;
 
         // Initialize Classes
         crdtController = new CRDTController(username);
@@ -49,9 +49,12 @@ public class MainUIController {
                 // if it remote delete, insert the operation to deletion buffer
 
                 // Execute remote buffer
+                /*
                 if(isInsertOperationExist(deletion_buffer.peek())){
                     crdtController.remoteDelete(deletion_buffer.remove());
                 }
+                */
+
 
             } catch (Exception e) {
                 System.out.println("Error on Remote Thread: " + e.getMessage());
