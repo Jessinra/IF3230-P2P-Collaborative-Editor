@@ -47,6 +47,8 @@ public class Node implements IMessageCallback {
         this.inBound = new InBound(inBoundPort, this);
         this.outBound = new OutBound();
 
+        this.peerList.add(new Peer(this.ipAddress, this.nodeId, this.inBoundPort));
+
         this.editorCallback = editorCallback;
     }
 
@@ -67,6 +69,8 @@ public class Node implements IMessageCallback {
 
         this.inBound = new InBound(this.inBoundPort, this);
         this.outBound = new OutBound();
+
+        this.peerList.add(new Peer(this.ipAddress, this.nodeId, this.inBoundPort));
 
         this.editorCallback = editorCallback;
     }
@@ -118,6 +122,9 @@ public class Node implements IMessageCallback {
         return peerList;
     }
 
+    public void addUniquePeer(Peer peer) {
+        peerList.add(peer);
+    }
 
     @Override
     public void onMessageReceived(CRDTLog crdtLog) {
@@ -136,12 +143,10 @@ public class Node implements IMessageCallback {
     @Override
     public void onPeerConnectionReceived(Peer incomingPeer) {
 
-        // Check for duplicate
         if (peerList.contains(incomingPeer)) {
             return;
         }
 
-        peerList.add(incomingPeer);
         editorCallback.onPeerJoined(incomingPeer);
     }
 

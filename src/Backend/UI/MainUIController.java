@@ -125,14 +125,16 @@ public class MainUIController implements IEditorCallback {
     @Override
     public void onPeerJoined(Peer incomingPeer) {
 
-        Message newPeerInfo = new Message(this.username, incomingPeer);
-        nodeClient.broadcastMessage(newPeerInfo);
-
         // Sending all listed peer to incoming peer
         for (Peer peer : nodeClient.getPeerList()) {
             Message peerInfo = new Message(this.username, peer);
             nodeClient.sendMessage(peerInfo, incomingPeer);
         }
+
+        Message newPeerInfo = new Message(this.username, incomingPeer);
+        nodeClient.broadcastMessage(newPeerInfo);
+
+        nodeClient.addUniquePeer(incomingPeer);
 
         // TODO : verify this
         Message snapshotMsg = new Message(this.username, this.crdtController);
@@ -141,6 +143,9 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onSyncSnapshot(CRDTController snapshot) {
-        this.crdtController = snapshot;
+
+        if (this.crdtController.getVersionVector().size() < snapshot.getVersionVector().size()) {
+            this.crdtController = snapshot;
+        }
     }
 }
