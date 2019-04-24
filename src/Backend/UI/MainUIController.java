@@ -3,6 +3,7 @@ package Backend.UI;
 import Backend.CRDT.CRDTChar;
 import Backend.CRDT.CRDTController;
 import Backend.CRDT.CRDTLog;
+import Backend.P2PServer.Message;
 import Backend.P2PServer.Node;
 import Backend.P2PServer.Peer;
 import Frontend.Class.UsernameBox;
@@ -145,8 +146,11 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onPeerJoined(Peer incomingPeer) {
-        // TODO
-        // share the peer list
-        // share the current log
+        // Sending all listed peer to incoming peer
+
+        for (Peer peer : nodeClient.getPeerList()) {
+            Message peerInfo = new Message(this.username, peer);
+            nodeClient.sendMessage(peerInfo, incomingPeer);
+        }
     }
 }

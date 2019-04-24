@@ -91,17 +91,20 @@ public class Node implements IMessageCallback {
     }
 
 
+    public void broadcastMessage(Message msg) {
+        for (Peer peer : peerList) {
+            System.out.println(nodeId + " is broadcasting message to " + peer.getNodeId());
+            this.outBound.send(peer.getIpAddr(), peer.getInboundPort(), msg);
+        }
+    }
+
     /**
      * Sends a message to a destination
      * @param msg The message to be sent
-     * @param dest_addr The destination address (e.g. IPv4 address)
-     * @param port The destination port number
      */
-    public void sendMessage(Message msg, String dest_addr, int port) {
-        for(Peer peer : peerList) {
-            System.out.println(nodeId + " is sending message to " + msg.getDestinationId());
-            this.outBound.send(peer.getIpAddr(), peer.getInboundPort(), msg);
-        }
+    public void sendMessage(Message msg, Peer target) {
+        System.out.println(this.nodeId + " is sending message to " + target.getNodeId());
+        this.outBound.send(target.getIpAddr(), target.getInboundPort(), msg);
     }
 
     /**
@@ -129,7 +132,7 @@ public class Node implements IMessageCallback {
     }
 
     private void sendJoinRequest(String targetIpAddress, int targetPort) {
-        Peer requestingPeer = new Peer(targetIpAddress, this.nodeId, this.inBoundPort);
+        Peer requestingPeer = new Peer(this.ipAddress, this.nodeId, this.inBoundPort);
         Message connectMessage = new Message(this.nodeId, requestingPeer);
         outBound.send(targetIpAddress, targetPort, connectMessage);
     }
@@ -150,6 +153,12 @@ public class Node implements IMessageCallback {
 
     @Override
     public void onPeerConnectionReceived(Peer incomingPeer) {
+
+        // Check for duplicate
+        if (peerList.contains(incomingPeer)) {
+            return;
+        }
+
         peerList.add(incomingPeer);
         editorCallback.onPeerJoined(incomingPeer);
     }

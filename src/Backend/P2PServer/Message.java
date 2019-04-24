@@ -14,11 +14,6 @@ public class Message implements Serializable {
     private String senderId;
 
     /**
-     * The ID of the intended recipient
-     */
-    private String destinationId;
-
-    /**
      * The actual message to be delivered
      */
     private Object message;
@@ -33,7 +28,6 @@ public class Message implements Serializable {
     /**
      * Creates a message object
      * @param senderId The originating node's ID
-     * @param destinationId The destination node's ID
      * @param message The message content
      */
     public Message(String senderId, Object message) {
@@ -61,15 +55,11 @@ public class Message implements Serializable {
      * The node ID of the receiver
      * @return Node ID
      */
-    public String getDestinationId() {
-        return destinationId;
-    }
 
     @Override
     public String toString() {
         return "Message{" +
                 "senderId='" + senderId + '\'' +
-                ", destinationId='" + destinationId + '\'' +
                 ", message=" + message.toString() +
                 '}';
     }
