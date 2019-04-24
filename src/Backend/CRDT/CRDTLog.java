@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 public class CRDTLog implements Serializable {
 
+    public static int DELETE = 0;
+    public static int INSERT = 1;
+
     private CRDTChar update;
     private int operation;
     private boolean updatedLocally = false;

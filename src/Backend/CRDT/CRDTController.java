@@ -62,7 +62,7 @@ public class CRDTController {
         CRDTChar newChar = this.generateCRDTChar(value, index);
         this.textContent.add(index, newChar);
         counter++;
-        this.versionVector.add(new CRDTLog(newChar, 1));
+        this.versionVector.add(new CRDTLog(newChar, CRDTLog.INSERT));
 
         return newChar;
     }
@@ -71,7 +71,7 @@ public class CRDTController {
         CRDTChar deleted = this.textContent.get(index);
         this.textContent.remove(index);
         counter++;
-        this.versionVector.add(new CRDTLog(deleted, 0));
+        this.versionVector.add(new CRDTLog(deleted, CRDTLog.DELETE));
 
         return deleted;
     }
@@ -79,12 +79,12 @@ public class CRDTController {
     public void remoteInsert(CRDTChar newChar) {
         int index = this.calculateInsertIndexOf(newChar);
         this.textContent.add(index, newChar);
-        this.versionVector.add(new CRDTLog(newChar, 1));
+        this.versionVector.add(new CRDTLog(newChar, CRDTLog.INSERT));
     }
 
     public void remoteDelete(CRDTChar deletedChar) {
         this.textContent.remove(deletedChar);
-        this.versionVector.add(new CRDTLog(deletedChar, 0));
+        this.versionVector.add(new CRDTLog(deletedChar, CRDTLog.DELETE));
     }
 
     public String getText() {

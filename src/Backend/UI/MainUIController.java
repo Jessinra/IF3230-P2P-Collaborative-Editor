@@ -53,12 +53,9 @@ public class MainUIController implements IEditorCallback {
                 // if it remote delete, insert the operation to deletion buffer
 
                 // Execute remote buffer
-                /*
                 if(isInsertOperationExist(deletion_buffer.peek())){
                     crdtController.remoteDelete(deletion_buffer.remove());
                 }
-                */
-
 
             } catch (Exception e) {
                 System.out.println("Error on Remote Thread: " + e.getMessage());
@@ -130,17 +127,17 @@ public class MainUIController implements IEditorCallback {
         System.out.println("Clicked Back, cursorPosition: " + cursorPosition.toString());
     }
 
-    private void addCRDTCharToDeletionBuffer(CRDTChar crdt_char){
-        deletion_buffer.add(crdt_char);
+    private void addCRDTCharToDeletionBuffer(CRDTChar crdtChar) {
+        deletion_buffer.add(crdtChar);
     }
 
-    private Boolean isInsertOperationExist(CRDTChar crdt_char){
+    private Boolean isInsertOperationExist(CRDTChar crdtChar) {
         Boolean isExist = false;
 
         for(int i = 0; i < crdtController.getVersionVector().size(); i++){
             CRDTLog log = crdtController.getLogAt(i);
 
-            if(log.getOperation() == 1 && log.getUpdate() == crdt_char){
+            if (log.getOperation() == 1 && log.getUpdate() == crdtChar) {
                 isExist = true;
             }
         }
@@ -150,10 +147,11 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onRemoteUpdate(CRDTLog crdtLog) {
-        // TODO
-        // check for type
-        // do the remoteInsert / remoteDelete
-        // insert into version vector
+        if (crdtLog.getOperation() == CRDTLog.INSERT) {
+            crdtController.remoteInsert(crdtLog.getUpdate());
+        } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
+            addCRDTCharToDeletionBuffer(crdtLog.getUpdate());
+        }
     }
 
     @Override
