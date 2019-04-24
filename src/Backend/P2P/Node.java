@@ -1,4 +1,4 @@
-package Backend.P2P
+package Backend.P2P;
 
 /**
  * A node in a peer to peer network.

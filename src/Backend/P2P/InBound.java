@@ -1,4 +1,4 @@
-package Backend.P2P
+package Backend.P2P;
 
 import java.io.IOException;
 import java.net.ServerSocket;
