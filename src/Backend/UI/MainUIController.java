@@ -49,9 +49,6 @@ public class MainUIController implements IEditorCallback {
             try {
                 System.out.println("Remote Thread running");
 
-                // Receive data from p2p then RemoteInsert/RemoteDelete
-                // if it remote delete, insert the operation to deletion buffer
-
                 // Execute remote buffer
                 if(isInsertOperationExist(deletion_buffer.peek())){
                     crdtController.remoteDelete(deletion_buffer.remove());
@@ -70,14 +67,6 @@ public class MainUIController implements IEditorCallback {
     public void initializeNodeClient() {
         // TODO initialize
         this.nodeClient = new Node(this.username, this);
-    }
-
-    public void onRemoteUpdateReceived() {
-        // TODO : implement this
-    }
-
-    public void onPeerJoinRequestReceived() {
-        // TODO: implement this
     }
 
     public void handleTextAreaInput(KeyEvent ev) {
