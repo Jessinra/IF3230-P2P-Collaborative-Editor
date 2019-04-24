@@ -108,9 +108,9 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onRemoteUpdate(CRDTLog crdtLog) {
-
         if (crdtLog.getOperation() == CRDTLog.INSERT) {
             crdtController.remoteInsert(crdtLog.getUpdate());
+            main_text_area.setText(crdtController.getText());
 
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
             crdtController.addCRDTLogToDeletionBuffer(crdtLog);
