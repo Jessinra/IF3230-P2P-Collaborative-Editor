@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-
 <MenuBar xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="Backend.UI.MenuBarController">
@@ -14,20 +8,20 @@
     <menus>
         <Menu text="File">
             <items>
-                <MenuItem fx:id="file_new" text="New" onAction="#createNewFile" />
+                <MenuItem fx:id="file_new" text="New" onAction="#createNewFile"/>
                 <MenuItem fx:id="file_open" text="Open"/>
                 <MenuItem fx:id="file_save" text="Save"/>
                 <MenuItem fx:id="file_save_as" text="Save as"/>
-                <SeparatorMenuItem />
+                <SeparatorMenuItem/>
                 <MenuItem fx:id="file_settings" text="Settings"/>
-                <SeparatorMenuItem />
-                <MenuItem fx:id="file_exit" text="Exit" onAction="#exitWindow" />
+                <SeparatorMenuItem/>
+                <MenuItem fx:id="file_exit" text="Exit" onAction="#exitWindow"/>
             </items>
         </Menu>
         <Menu text="Edit">
             <MenuItem text="Undo" disable="true"/>
             <MenuItem text="Redo" disable="true"/>
-            <SeparatorMenuItem />
+            <SeparatorMenuItem/>
             <MenuItem text="Cut" disable="true"/>
             <MenuItem text="Copy" disable="true"/>
             <MenuItem text="Paste" disable="true"/>

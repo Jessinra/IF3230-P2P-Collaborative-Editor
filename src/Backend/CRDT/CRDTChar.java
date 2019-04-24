@@ -16,14 +16,14 @@ public class CRDTChar implements Serializable {
                                    Constructor
     ================================================================= */
 
-    public CRDTChar(String writerId, char value) {
+    CRDTChar(String writerId, char value) {
         this.writerId = writerId;
         this.value = value;
 
         this.timeStamp = new Date().getTime();
     }
 
-    public CRDTChar(String writerId, char value, ArrayList<Integer> position) {
+    CRDTChar(String writerId, char value, ArrayList<Integer> position) {
         this.writerId = writerId;
         this.value = value;
         this.position = position;
@@ -35,40 +35,20 @@ public class CRDTChar implements Serializable {
                                   Getter Setter
     ================================================================= */
 
-    public String getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(String writerId) {
-        this.writerId = writerId;
-    }
-
-    public char getValue() {
+    char getValue() {
         return value;
     }
 
-    public void setValue(char value) {
-        this.value = value;
-    }
-
-    public ArrayList<Integer> getPosition() {
+    ArrayList<Integer> getPosition() {
         return position;
     }
 
-    public void setPosition(ArrayList<Integer> position) {
-        this.position = position;
-    }
-
-    public void addToPosition(int i) {
+    void addToPosition(int i) {
         this.position.add(i);
     }
 
-    public long getTimeStamp() {
+    long getTimeStamp() {
         return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
     }
 
     /* =================================================================
@@ -91,12 +71,12 @@ public class CRDTChar implements Serializable {
         }
 
         CRDTChar o = (CRDTChar) obj;
-        return this.writerId.equals(o.getWriterId()) &&
-                this.value == o.getValue() &&
-                Arrays.equals(this.position.toArray(), o.getPosition().toArray());
+        return this.writerId.equals(o.writerId) &&
+                this.value == o.value &&
+                Arrays.equals(this.position.toArray(), o.position.toArray());
     }
 
-    public boolean deepEquals(CRDTChar obj) {
+    boolean deepEquals(CRDTChar obj) {
         return equals(obj) && this.timeStamp == obj.timeStamp;
     }
 }

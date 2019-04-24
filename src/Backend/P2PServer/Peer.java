@@ -7,26 +7,18 @@ public class Peer implements Serializable {
     private String nodeId;
     private int inboundPort;
 
-    public Peer(String ipAddr, String nodeId, int inboundPort) {
+    Peer(String ipAddr, String nodeId, int inboundPort) {
         this.ipAddr = ipAddr;
         this.nodeId = nodeId;
         this.inboundPort = inboundPort;
     }
 
-    public String getIpAddr() {
+    String getIpAddr() {
         return ipAddr;
     }
 
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    public int getInboundPort() {
+    int getInboundPort() {
         return inboundPort;
-    }
-
-    public void setInboundPort(int inboundPort) {
-        this.inboundPort = inboundPort;
     }
 
     public boolean equals(Object obj) {

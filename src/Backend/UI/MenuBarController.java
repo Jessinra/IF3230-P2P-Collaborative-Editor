@@ -7,16 +7,19 @@ import javafx.scene.control.MenuItem;
 public class MenuBarController {
 
     // File's Menu Item
-    @FXML private MenuItem file_new;
-    @FXML private MenuItem file_open;
-    @FXML private MenuItem file_exit;
+    @FXML
+    private MenuItem file_new;
+    @FXML
+    private MenuItem file_open;
+    @FXML
+    private MenuItem file_exit;
 
 
-    public void createNewFile(){
+    public void createNewFile() {
 
     }
 
-    public void exitWindow(){
+    public void exitWindow() {
         Platform.exit();
     }
 }

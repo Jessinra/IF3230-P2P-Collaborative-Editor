@@ -36,10 +36,7 @@ public class MainUIController implements IEditorCallback {
 
         initializeNodeClient();
 
-        Thread node1Thread = new Thread(() -> {
-            this.nodeClient.start();
-        });
-
+        Thread node1Thread = new Thread(() -> this.nodeClient.start());
         Thread node2Thread = new Thread(() -> {
             if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
                 System.out.println("Joining peer...");
@@ -127,16 +124,23 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onPeerJoined(Peer incomingPeer) {
-        // Sending all listed peer to incoming peer
 
+        Message newPeerInfo = new Message(this.username, incomingPeer);
+        nodeClient.broadcastMessage(newPeerInfo);
+
+        // Sending all listed peer to incoming peer
         for (Peer peer : nodeClient.getPeerList()) {
             Message peerInfo = new Message(this.username, peer);
             nodeClient.sendMessage(peerInfo, incomingPeer);
         }
 
-        Message newPeerInfo = new Message(this.username, incomingPeer);
-        nodeClient.broadcastMessage(newPeerInfo);
+        // TODO : verify this
+        Message snapshotMsg = new Message(this.username, this.crdtController);
+        nodeClient.sendMessage(snapshotMsg, incomingPeer);
+    }
 
-        // TODO sync snapshot
+    @Override
+    public void onSyncSnapshot(CRDTController snapshot) {
+        this.crdtController = snapshot;
     }
 }

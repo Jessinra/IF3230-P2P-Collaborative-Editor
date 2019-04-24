@@ -1,17 +1,17 @@
 package Backend.CRDT;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import static java.lang.Integer.max;
 
-public class CRDTController {
+public class CRDTController implements Serializable {
+
     private static final int minCharIdx = 0;
     private static final int maxCharIdx = 999999;
 
     private String clientId;
-    private int counter;
     private ArrayList<CRDTChar> textContent = new ArrayList<>();
     private ArrayList<CRDTLog> versionVector = new ArrayList<>();
     private ArrayList<CRDTLog> deletionBuffer = new ArrayList<>();
@@ -22,7 +22,6 @@ public class CRDTController {
 
     public CRDTController(String clientId) {
         this.clientId = clientId;
-        counter = 0;
     }
 
     /* =================================================================
@@ -68,7 +67,6 @@ public class CRDTController {
     public CRDTChar localInsert(char value, int index) {
         CRDTChar newChar = this.generateCRDTChar(value, index);
         this.textContent.add(index, newChar);
-        counter++;
         this.versionVector.add(new CRDTLog(newChar, CRDTLog.INSERT));
 
         return newChar;
@@ -77,7 +75,6 @@ public class CRDTController {
     public CRDTChar localDelete(int index) {
         CRDTChar deleted = this.textContent.get(index);
         this.textContent.remove(index);
-        counter++;
         this.versionVector.add(new CRDTLog(deleted, CRDTLog.DELETE));
 
         return deleted;
@@ -102,24 +99,6 @@ public class CRDTController {
         return sb.toString();
     }
 
-    public CRDTLog getLastUpdate() {
-        try {
-            return getLogAt(this.versionVector.size() - 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public CRDTLog getLogAt(int i) {
-        try {
-            return this.versionVector.get(i);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void addCRDTLogToDeletionBuffer(CRDTLog crdtLog) {
         deletionBuffer.add(crdtLog);
     }
@@ -134,13 +113,8 @@ public class CRDTController {
         return false;
     }
 
-
-    public void resetText() {
+    void resetText() {
         this.textContent.clear();
-    }
-
-    public void resetLog() {
-        this.versionVector.clear();
     }
 
     /* =================================================================
@@ -271,8 +245,7 @@ public class CRDTController {
                 }
 
                 // if conflict (check for timestamp)
-                else if (newCharNum == currCharNum) {
-
+                else {
                     long newTimeStamp = newChar.getTimeStamp();
                     long currTimeStamp = this.textContent.get(i).getTimeStamp();
 

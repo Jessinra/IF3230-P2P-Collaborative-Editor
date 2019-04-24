@@ -7,38 +7,40 @@ import javafx.scene.shape.Rectangle;
 
 public class PeerBoxController {
 
-    @FXML private Rectangle peer_rectangle;
-    @FXML private Label peer_label;
+    @FXML
+    private Rectangle peer_rectangle;
+    @FXML
+    private Label peer_label;
 
 
     /* =================================================================
                                     GETTER
     ================================================================= */
-    public Rectangle getRectangle(){
+    public Rectangle getRectangle() {
         return peer_rectangle;
     }
 
-    public Label getLabel(){
+    public Label getLabel() {
         return peer_label;
     }
 
-    public String getLabelText(){
+    public String getLabelText() {
         return peer_label.getText();
     }
 
     /* =================================================================
                                     SETTER
     ================================================================= */
-    public void setLabelText(String text){
+    public void setLabelText(String text) {
         peer_label.setText(text);
     }
 
-    public void setRectangleSize(double width, double height){
+    public void setRectangleSize(double width, double height) {
         peer_rectangle.setWidth(width);
         peer_rectangle.setHeight(height);
     }
 
-    public void setRectangleColor(Color color){
+    public void setRectangleColor(Color color) {
         peer_rectangle.setFill(color);
     }
 

@@ -9,7 +9,6 @@ public class CRDTLog implements Serializable {
 
     private CRDTChar update;
     private int operation;
-    private boolean updatedLocally = false;
 
     public CRDTLog(CRDTChar update, int operation) {
 
@@ -21,24 +20,8 @@ public class CRDTLog implements Serializable {
         return update;
     }
 
-    public void setUpdate(CRDTChar update) {
-        this.update = update;
-    }
-
     public int getOperation() {
         return operation;
-    }
-
-    public void setOperation(int operation) {
-        this.operation = operation;
-    }
-
-    public void setAsUpdated() {
-        this.updatedLocally = true;
-    }
-
-    public boolean isUpdatedLocally() {
-        return updatedLocally;
     }
 
 }

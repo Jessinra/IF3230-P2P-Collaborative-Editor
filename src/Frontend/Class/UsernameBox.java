@@ -1,8 +1,6 @@
 package Frontend.Class;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -22,7 +20,7 @@ public class UsernameBox {
     public static String ip_address;
     public static int port;
 
-    public static void display(String title){
+    static void display(String title) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
@@ -57,7 +55,7 @@ public class UsernameBox {
         createRadio.setUserData(UsernameBox.CREATE);
         createRadio.setToggleGroup(radioGroup);
         createRadio.setSelected(false);
-        GridPane.setConstraints(createRadio, 10,3);
+        GridPane.setConstraints(createRadio, 10, 3);
         GridPane.setHalignment(createRadio, HPos.LEFT);
 
         // joinRadio
@@ -70,26 +68,21 @@ public class UsernameBox {
         GridPane.setHalignment(joinRadio, HPos.RIGHT);
 
         //radioGroup
-        radioGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable,
-                                Toggle oldValue, Toggle newValue) {
-                if(radioGroup.getSelectedToggle() != null){
-                    submitType = radioGroup.getSelectedToggle().getUserData().toString();
-                    System.out.println("submitType: " + submitType);
+        radioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (radioGroup.getSelectedToggle() != null) {
+                submitType = radioGroup.getSelectedToggle().getUserData().toString();
+                System.out.println("submitType: " + submitType);
 
-                    if(submitType.equals(UsernameBox.CREATE)){
-                        ipTextField.clear();
-                        portTextField.clear();
-                        ipTextField.setDisable(true);
-                        portTextField.setDisable(true);
-                    }
-                    else {
-                        ipTextField.clear();
-                        portTextField.clear();
-                        ipTextField.setDisable(false);
-                        portTextField.setDisable(false);
-                    }
+                if (submitType.equals(UsernameBox.CREATE)) {
+                    ipTextField.clear();
+                    portTextField.clear();
+                    ipTextField.setDisable(true);
+                    portTextField.setDisable(true);
+                } else {
+                    ipTextField.clear();
+                    portTextField.clear();
+                    ipTextField.setDisable(false);
+                    portTextField.setDisable(false);
                 }
             }
         });
@@ -97,11 +90,10 @@ public class UsernameBox {
         // Button
         Button submitButton = new Button("GO!");
         submitButton.setOnAction(e -> {
-            if(submitType.equals(UsernameBox.CREATE) && !usernameTextField.getText().isEmpty()){
+            if (submitType.equals(UsernameBox.CREATE) && !usernameTextField.getText().isEmpty()) {
                 username = usernameTextField.getText();
-            }
-            else if(submitType.equals(UsernameBox.JOIN) && !usernameTextField.getText().isEmpty() &&
-                    !ipTextField.getText().isEmpty() && !portTextField.getText().isEmpty()){
+            } else if (submitType.equals(UsernameBox.JOIN) && !usernameTextField.getText().isEmpty() &&
+                    !ipTextField.getText().isEmpty() && !portTextField.getText().isEmpty()) {
 
                 username = usernameTextField.getText();
                 ip_address = ipTextField.getText();
@@ -119,7 +111,7 @@ public class UsernameBox {
 
         // Grid Pane
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,10,10));
+        grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
         grid.setHgap(10);
         grid.getChildren().addAll(usernameLabel, usernameTextField,
@@ -130,8 +122,8 @@ public class UsernameBox {
         window.showAndWait();
     }
 
-    private static Color stringToFXColor(String str_color){
-        switch (str_color){
+    private static Color stringToFXColor(String str_color) {
+        switch (str_color) {
             case "AQUA":
                 return Color.AQUA;
             case "LIGHTBLUE":

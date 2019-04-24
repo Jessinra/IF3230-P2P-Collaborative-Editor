@@ -24,11 +24,11 @@ public class Message implements Serializable {
     public Message() {
     }
 
-
     /**
      * Creates a message object
+     *
      * @param senderId The originating node's ID
-     * @param message The message content
+     * @param message  The message content
      */
     public Message(String senderId, Object message) {
         this.senderId = senderId;
@@ -36,18 +36,11 @@ public class Message implements Serializable {
     }
 
     /**
-     * Gets the sending node's ID
-     * @return
-     */
-    public String getSenderId() {
-        return senderId;
-    }
-
-    /**
      * Gets the message object
+     *
      * @return The message
      */
-    public Object getMessage() {
+    Object getMessage() {
         return message;
     }
 
