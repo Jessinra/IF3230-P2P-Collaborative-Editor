@@ -12,6 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 public class MainUIController implements IEditorCallback {
@@ -23,7 +25,7 @@ public class MainUIController implements IEditorCallback {
 
     private Color color;
     private CRDTController crdtController;
-    private Queue<CRDTChar> deletion_buffer;
+    private Queue<CRDTLog> deletion_buffer;
 
     @FXML private PeersController peersController;
     @FXML private TextArea main_text_area;
@@ -51,7 +53,7 @@ public class MainUIController implements IEditorCallback {
 
                 // Execute remote buffer
                 if(isInsertOperationExist(deletion_buffer.peek())){
-                    crdtController.remoteDelete(deletion_buffer.remove());
+                    crdtController.remoteDelete(deletion_buffer.remove().getUpdate());
                 }
 
             } catch (Exception e) {
@@ -116,18 +118,26 @@ public class MainUIController implements IEditorCallback {
         System.out.println("Clicked Back, cursorPosition: " + cursorPosition.toString());
     }
 
-    private void addCRDTCharToDeletionBuffer(CRDTChar crdtChar) {
-        deletion_buffer.add(crdtChar);
+    private void addCRDTLogToDeletionBuffer(CRDTLog crdtLog) {
+        deletion_buffer.add(crdtLog);
     }
 
-    private Boolean isInsertOperationExist(CRDTChar crdtChar) {
-        Boolean isExist = false;
+    private Boolean isInsertOperationExist(CRDTLog crdtLog) {
 
+        ArrayList<Integer> pos = crdtLog.getUpdate().getPosition();
+        char value = crdtLog.getUpdate().getValue();
+        String writer_id = crdtLog.getUpdate().getWriterId();
+        long timestamp = crdtLog.getUpdate().getTimeStamp();
+
+        Boolean isExist = false;
         for(int i = 0; i < crdtController.getVersionVector().size(); i++){
             CRDTLog log = crdtController.getLogAt(i);
+            if (log.getOperation() == CRDTLog.INSERT && log.getUpdate().getValue() == value &&
+                log.getUpdate().getPosition() == pos && log.getUpdate().getWriterId().equals(writer_id) &&
+                log.getUpdate().getTimeStamp() <= timestamp) {
 
-            if (log.getOperation() == 1 && log.getUpdate() == crdtChar) {
                 isExist = true;
+                break;
             }
         }
 
@@ -139,7 +149,7 @@ public class MainUIController implements IEditorCallback {
         if (crdtLog.getOperation() == CRDTLog.INSERT) {
             crdtController.remoteInsert(crdtLog.getUpdate());
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
-            addCRDTCharToDeletionBuffer(crdtLog.getUpdate());
+            addCRDTLogToDeletionBuffer(crdtLog);
         }
     }
 
