@@ -11,10 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 public class MainUIController implements IEditorCallback {
@@ -27,8 +24,10 @@ public class MainUIController implements IEditorCallback {
     private CRDTController crdtController;
     private Queue<CRDTLog> deletion_buffer;
 
-    @FXML private PeersController peersController;
-    @FXML private TextArea main_text_area;
+    @FXML
+    private PeersController peersController;
+    @FXML
+    private TextArea main_text_area;
 
     private Node nodeClient;
 
@@ -40,29 +39,11 @@ public class MainUIController implements IEditorCallback {
         joinTargetPort = UsernameBox.port;
 
         // Initialize Classes & Lists
-        
         crdtController = new CRDTController(username);
         initializeNodeClient();
-
-        // Create a thread for remote operations
-        /*
-        Thread object = new Thread(() -> {
-            try {
-                System.out.println("Remote Thread running");
-
-            } catch (Exception e) {
-                System.out.println("Error on Remote Thread: " + e.getMessage());
-                System.out.println("Stack Trace: ");
-                e.getMessage();
-            }
-        });
-
-        object.start();
-        */
     }
 
     public void initializeNodeClient() {
-        // TODO initialize
         this.nodeClient = new Node(this.username, this);
     }
 
@@ -83,25 +64,29 @@ public class MainUIController implements IEditorCallback {
         // Handle BackSpace
         else if (ev.getCode() == KeyCode.BACK_SPACE) {
             if (cursorPosition > 0) {
-                crdtController.localDelete(cursorPosition - 1);
+                CRDTChar updatedChar = crdtController.localDelete(cursorPosition - 1);
+                broadcastLocalDelete(updatedChar);
             }
         }
 
         // Handle Delete Button
         else if (ev.getCode() == KeyCode.DELETE) {
             if (cursorPosition < crdtController.getTextContent().size()) {
-                crdtController.localDelete(cursorPosition);
+                CRDTChar updatedChar = crdtController.localDelete(cursorPosition);
+                broadcastLocalDelete(updatedChar);
             }
         }
 
         // 'Enter' is kinda different from other whitespace, so to print out , need \n instead of normal enter key
         else if (ev.getCode() == KeyCode.ENTER) {
-            crdtController.localInsert('\n', cursorPosition);
+            CRDTChar updatedChar = crdtController.localInsert('\n', cursorPosition);
+            broadcastLocalInsert(updatedChar);
         }
 
         // Insert letter
         else {
-            crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
+            CRDTChar updatedChar = crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
+            broadcastLocalInsert(updatedChar);
         }
 
         System.out.println("========");
@@ -117,26 +102,26 @@ public class MainUIController implements IEditorCallback {
         deletion_buffer.add(crdtLog);
     }
 
+    private void broadcastLocalInsert(CRDTChar updateChar) {
+        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.INSERT);
+        Message updateMessage = new Message(this.username, remoteUpdateMessage);
+        nodeClient.broadcastMessage(updateMessage);
+    }
+
+    private void broadcastLocalDelete(CRDTChar updateChar) {
+        CRDTLog remoteUpdateMessage = new CRDTLog(updateChar, CRDTLog.DELETE);
+        Message updateMessage = new Message(this.username, remoteUpdateMessage);
+        nodeClient.broadcastMessage(updateMessage);
+    }
+
     private Boolean isInsertOperationExist(CRDTLog crdtLog) {
-
-        ArrayList<Integer> pos = crdtLog.getUpdate().getPosition();
-        char value = crdtLog.getUpdate().getValue();
-        String writer_id = crdtLog.getUpdate().getWriterId();
-        long timestamp = crdtLog.getUpdate().getTimeStamp();
-
-        Boolean isExist = false;
-        for(int i = 0; i < crdtController.getVersionVector().size(); i++){
-            CRDTLog log = crdtController.getLogAt(i);
-            if (log.getOperation() == CRDTLog.INSERT && log.getUpdate().getValue() == value &&
-                log.getUpdate().getPosition() == pos && log.getUpdate().getWriterId().equals(writer_id) &&
-                log.getUpdate().getTimeStamp() <= timestamp) {
-
-                isExist = true;
-                break;
+        for (CRDTLog log : crdtController.getVersionVector()) {
+            if (log.getOperation() == CRDTLog.INSERT &&
+                    log.getUpdate().deepEquals(crdtLog.getUpdate())) {
+                return true;
             }
         }
-
-        return isExist;
+        return false;
     }
 
     @Override
@@ -147,7 +132,7 @@ public class MainUIController implements IEditorCallback {
             addCRDTLogToDeletionBuffer(crdtLog);
         }
 
-        if(!deletion_buffer.isEmpty() && isInsertOperationExist(deletion_buffer.peek())){
+        if (!deletion_buffer.isEmpty() && isInsertOperationExist(deletion_buffer.peek())) {
             crdtController.remoteDelete(deletion_buffer.remove().getUpdate());
         }
     }
@@ -160,5 +145,8 @@ public class MainUIController implements IEditorCallback {
             Message peerInfo = new Message(this.username, peer);
             nodeClient.sendMessage(peerInfo, incomingPeer);
         }
+
+        Message newPeerInfo = new Message(this.username, incomingPeer);
+        nodeClient.broadcastMessage(newPeerInfo);
     }
 }
