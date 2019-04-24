@@ -51,11 +51,6 @@ public class Message implements Serializable {
         return message;
     }
 
-    /**
-     * The node ID of the receiver
-     * @return Node ID
-     */
-
     @Override
     public String toString() {
         return "Message{" +

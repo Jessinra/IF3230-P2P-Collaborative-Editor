@@ -7,5 +7,7 @@ import Backend.CRDT.CRDTLog;
  */
 public interface IMessageCallback {
     abstract void onMessageReceived(CRDTLog crdtLog);
-    abstract void onPeerConnectionReceived(Peer incomingPeer);
+    abstract void onPeerConnectionReceived(ConnectingPeer incomingPeer);
+    abstract void onNewPeerAccepted(NewPeer newPeer);
+    abstract void onPeerReceived(Peer peer);
 }

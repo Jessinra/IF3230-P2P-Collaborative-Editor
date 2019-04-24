@@ -1,6 +1,8 @@
 package Backend.P2PServer;
 
-public class Peer {
+import java.io.Serializable;
+
+public class Peer implements Serializable {
     private String ipAddr;
     private String nodeId;
     private int inboundPort;
@@ -15,16 +17,8 @@ public class Peer {
         return ipAddr;
     }
 
-    public void setIpAddr(String ipAddr) {
-        this.ipAddr = ipAddr;
-    }
-
     public String getNodeId() {
         return nodeId;
-    }
-
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
     }
 
     public int getInboundPort() {

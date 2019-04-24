@@ -56,7 +56,6 @@ public class Node implements IMessageCallback {
         this.nodeId = nodeId;
         this.ipAddress = ipAddress;
         this.inBoundPort = inBoundPort;
-
         this.inBound = new InBound(inBoundPort, this);
         this.outBound = new OutBound();
 
@@ -108,6 +107,23 @@ public class Node implements IMessageCallback {
     }
 
     /**
+     * Sends a message to a destination
+     * @param msg The message to be sent
+     */
+    public void sendMessageToAllPeer(Message msg) {
+        for(Peer peer : peerList) {
+            //System.out.println(nodeId + " is sending message to " + peer.getNodeId());
+            this.outBound.send(peer.getIpAddr(), peer.getInboundPort(), msg);
+        }
+    }
+
+    // TODO: Butuh local update yang mangggil sendrequest., interface buat ngirim message berisi CRDT Log
+    // TODO: onPeerJoin()
+    // TODO: onLocalUpdate()
+    // TODO: sendOnMessageReceived()
+    // 2 2nya manggil sendMessageToAllPeer
+
+    /**
      * Gets the ID of the node
      * @return The node ID
      */
@@ -123,6 +139,10 @@ public class Node implements IMessageCallback {
         return inBoundPort;
     }
 
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
     public ArrayList<Peer> getPeerList() {
         return peerList;
     }
@@ -131,7 +151,7 @@ public class Node implements IMessageCallback {
         return peerList.size();
     }
 
-    private void sendJoinRequest(String targetIpAddress, int targetPort) {
+    public void sendJoinRequest(String targetIpAddress, int targetPort) {
         Peer requestingPeer = new Peer(this.ipAddress, this.nodeId, this.inBoundPort);
         Message connectMessage = new Message(this.nodeId, requestingPeer);
         outBound.send(targetIpAddress, targetPort, connectMessage);
@@ -151,8 +171,9 @@ public class Node implements IMessageCallback {
         editorCallback.onRemoteUpdate(crdtLog);
     }
 
-    @Override
-    public void onPeerConnectionReceived(Peer incomingPeer) {
+
+    /*
+        public void onPeerConnectionReceived(Peer incomingPeer) {
 
         // Check for duplicate
         if (peerList.contains(incomingPeer)) {
@@ -161,5 +182,32 @@ public class Node implements IMessageCallback {
 
         peerList.add(incomingPeer);
         editorCallback.onPeerJoined(incomingPeer);
+    */
+    @Override
+    public void onPeerConnectionReceived(ConnectingPeer incomingPeer) {
+        Message newPeer = new Message(nodeId, new NewPeer(incomingPeer.getIpAddr(), incomingPeer.getNodeId(), incomingPeer.getInboundPort()));
+        // Kirim peer baru yang connect ke semua peer dari node ini
+        sendMessageToAllPeer(newPeer);
+        // Tambahin peer baru sebagai peer dari node ini
+        System.out.println(nodeId + " ---> " + incomingPeer.getNodeId());
+        peerList.add(incomingPeer);
+        Message sendPeer = new Message(nodeId, new Peer(ipAddress, nodeId, inBoundPort));
+        outBound.send(incomingPeer.getIpAddr(), incomingPeer.getInboundPort(), sendPeer);
+    }
+
+    @Override
+    public void onNewPeerAccepted(NewPeer newPeer) {
+        System.out.println(nodeId + " ---> " + newPeer.getNodeId());
+        peerList.add(newPeer);
+        // Send response peer
+        Message resPeer = new Message(nodeId, new Peer(ipAddress, nodeId, inBoundPort));
+        outBound.send(newPeer.getIpAddr(), newPeer.getInboundPort(), resPeer);
+
+    }
+
+    @Override
+    public void onPeerReceived(Peer peer) {
+        System.out.println(nodeId + " ---> " + peer.getNodeId());
+        peerList.add(peer);
     }
 }

@@ -27,8 +27,12 @@ public class ConnectionHandler implements Runnable {
             Message message = (Message) objectInputStream.readObject();
             if (message.getMessage() instanceof  CRDTLog) {
                 callback.onMessageReceived((CRDTLog) message.getMessage());
+            } else if (message.getMessage() instanceof ConnectingPeer) {
+                callback.onPeerConnectionReceived((ConnectingPeer) message.getMessage());
+            } else if (message.getMessage() instanceof NewPeer) {
+                callback.onNewPeerAccepted((NewPeer) message.getMessage());
             } else if (message.getMessage() instanceof Peer) {
-                callback.onPeerConnectionReceived((Peer) message.getMessage());
+                callback.onPeerReceived((Peer) message.getMessage());
             } else {
                 throw new ClassNotFoundException();
             }
