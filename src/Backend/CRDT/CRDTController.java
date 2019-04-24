@@ -14,7 +14,7 @@ public class CRDTController {
     private int counter;
     private ArrayList<CRDTChar> textContent = new ArrayList<>();
     private ArrayList<CRDTLog> versionVector = new ArrayList<>();
-    private Queue<CRDTLog> deletionBuffer;
+    private ArrayList<CRDTLog> deletionBuffer = new ArrayList<>();
 
     /* =================================================================
                                 Constructor
@@ -57,9 +57,9 @@ public class CRDTController {
         this.versionVector = versionVector;
     }
 
-    public Queue<CRDTLog> getDeletionBuffer(){ return deletionBuffer; }
+    public ArrayList<CRDTLog> getDeletionBuffer(){ return deletionBuffer; }
 
-    public void setDeletionBuffer(Queue<CRDTLog> deletion_buffer) { this.deletionBuffer = deletion_buffer; }
+    public void setDeletionBuffer(ArrayList<CRDTLog> deletion_buffer) { this.deletionBuffer = deletion_buffer; }
 
     /* =================================================================
                               Public API call

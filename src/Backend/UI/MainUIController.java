@@ -105,8 +105,8 @@ public class MainUIController implements IEditorCallback {
         }
 
         if (!crdtController.getDeletionBuffer().isEmpty() &&
-                crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().peek())) {
-            crdtController.remoteDelete(crdtController.getDeletionBuffer().remove().getUpdate());
+                crdtController.isInsertOperationExist(crdtController.getDeletionBuffer().get(0))) {
+            crdtController.remoteDelete(crdtController.getDeletionBuffer().remove(0).getUpdate());
         }
     }
 
