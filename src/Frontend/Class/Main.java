@@ -17,6 +17,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Initialize Main UI FXML
+        UsernameBox.display("Peer2Peer Collaborative Editing");
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/MainUI.fxml"));
 
         Parent root = (Parent) loader.load();

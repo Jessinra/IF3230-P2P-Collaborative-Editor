@@ -29,28 +29,30 @@ public class MainUIController implements IEditorCallback {
     public MainUIController() {
 
         // Show UsernameBox
-        UsernameBox.display("Peer2Peer Collaborative Editing");
         username = UsernameBox.username;
 
         // Initialize Classes & Lists
         crdtController = new CRDTController(username);
 
-        Thread nodeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                initializeNodeClient();
-                if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
-                    nodeClient.sendJoinRequest(UsernameBox.ip_address, UsernameBox.port);
-                }
+        initializeNodeClient();
+
+        Thread node1Thread = new Thread(() -> {
+            this.nodeClient.start();
+        });
+
+        Thread node2Thread = new Thread(() -> {
+            if (UsernameBox.submitType.equals(UsernameBox.JOIN)) {
+                System.out.println("Joining peer...");
+                nodeClient.sendJoinRequest(UsernameBox.ip_address, UsernameBox.port);
             }
         });
 
-        nodeThread.start();
+        node1Thread.start();
+        node2Thread.start();
     }
 
     private void initializeNodeClient() {
         this.nodeClient = new Node(this.username, this);
-        this.nodeClient.start();
     }
 
     public void handleTextAreaInput(KeyEvent ev) {

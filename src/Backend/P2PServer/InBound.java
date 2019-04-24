@@ -22,7 +22,7 @@ public class InBound {
             System.out.println("Started inbound socket on port " + port);
             while (isOnline) {
                 Socket socket = serverSocket.accept();
-                //System.out.println("inbound: " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
+                System.out.println("inbound: " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
                 Runnable runnable = new ConnectionHandler(socket, callback);
                 new Thread(runnable).start();
             }
