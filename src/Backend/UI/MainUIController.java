@@ -63,7 +63,7 @@ public class MainUIController implements IEditorCallback {
                 ev.getCode().isModifierKey() ||
                 ev.getCode().isNavigationKey() ||
                 ev.getCode().isArrowKey()) {
-            return;
+
         }
 
         // Handle BackSpace
@@ -93,7 +93,10 @@ public class MainUIController implements IEditorCallback {
             CRDTChar updatedChar = crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
             nodeClient.broadcastLocalInsert(updatedChar);
         }
+
+        refreshUI();
     }
+
 
     public void resetCursor() {
         cursorPosition = main_text_area.getCaretPosition();
@@ -101,9 +104,17 @@ public class MainUIController implements IEditorCallback {
     }
 
     private void refreshUI() {
-        int prevPosition = main_text_area.getCaretPosition();
-        main_text_area.setText(crdtController.getText());
-        main_text_area.positionCaret(prevPosition);
+
+        try {
+            int prevPosition = main_text_area.getCaretPosition();
+            main_text_area.setText(crdtController.getText());
+            main_text_area.positionCaret(prevPosition);
+
+        } catch (Exception e) {
+
+            main_text_area.setText(crdtController.getText());
+            main_text_area.positionCaret(0);
+        }
 
         System.out.println(crdtController.getText());
     }
@@ -133,6 +144,10 @@ public class MainUIController implements IEditorCallback {
 
     @Override
     public void onPeerJoined(Peer incomingPeer) {
+
+        // Sending own data to them
+        Message ownPeerInfo = new Message(this.username, nodeClient.getSelfPeer());
+        nodeClient.sendMessage(ownPeerInfo, incomingPeer);
 
         // Sending all listed peer to incoming peer
         for (Peer peer : nodeClient.getPeerList()) {

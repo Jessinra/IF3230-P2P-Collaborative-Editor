@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A node in a peer to peer network.
@@ -26,10 +27,11 @@ public class Node implements IMessageCallback {
     private String ipAddress;
     private final int inBoundPort;
 
-    private ArrayList<Peer> peerList = new ArrayList<>();
+    private CopyOnWriteArrayList<Peer> peerList = new CopyOnWriteArrayList<>();
 
     private IEditorCallback editorCallback;
 
+    private Peer selfPeer;
 
     /**
      * Instantiates a node object
@@ -47,7 +49,7 @@ public class Node implements IMessageCallback {
         this.inBound = new InBound(inBoundPort, this);
         this.outBound = new OutBound();
 
-        this.peerList.add(new Peer(this.ipAddress, this.nodeId, this.inBoundPort));
+        this.selfPeer = new Peer(this.ipAddress, this.nodeId, this.inBoundPort);
 
         this.editorCallback = editorCallback;
     }
@@ -70,7 +72,7 @@ public class Node implements IMessageCallback {
         this.inBound = new InBound(this.inBoundPort, this);
         this.outBound = new OutBound();
 
-        this.peerList.add(new Peer(this.ipAddress, this.nodeId, this.inBoundPort));
+        this.selfPeer = new Peer(this.ipAddress, this.nodeId, this.inBoundPort);
 
         this.editorCallback = editorCallback;
     }
@@ -118,7 +120,7 @@ public class Node implements IMessageCallback {
         this.outBound.send(target.getIpAddr(), target.getInboundPort(), msg);
     }
 
-    public ArrayList<Peer> getPeerList() {
+    public CopyOnWriteArrayList<Peer> getPeerList() {
         return peerList;
     }
 
@@ -154,5 +156,9 @@ public class Node implements IMessageCallback {
     public void onSnapshotReceived(CRDTController snapshot) {
         snapshot.setClientId(this.nodeId);
         editorCallback.onSyncSnapshot(snapshot);
+    }
+
+    public Peer getSelfPeer() {
+        return selfPeer;
     }
 }
