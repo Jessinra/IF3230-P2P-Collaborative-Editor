@@ -93,8 +93,6 @@ public class MainUIController implements IEditorCallback {
             CRDTChar updatedChar = crdtController.localInsert((ev.getText()).charAt(0), cursorPosition);
             nodeClient.broadcastLocalInsert(updatedChar);
         }
-
-        refreshUI();
     }
 
 
@@ -112,8 +110,6 @@ public class MainUIController implements IEditorCallback {
 
         } catch (Exception e) {
 
-            main_text_area.setText(crdtController.getText());
-            main_text_area.positionCaret(0);
         }
 
         System.out.println(crdtController.getText());
