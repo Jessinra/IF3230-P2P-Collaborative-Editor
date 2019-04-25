@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="VBox_peer" prefWidth="150" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Backend.UI.PeersController"
+      spacing="5">
+    <padding> <Insets bottom="10" left="10" right="10" top="10" /></padding>
+
+    <!--<Button fx:id="button1" onAction="#changeOne" />-->
+
+    <Label text="Peers: "/>
+
+    <Label fx:id="peer1" />
+    <Label fx:id="peer2" />
+    <Label fx:id="peer3" />
+    <Label fx:id="peer4" />
+    <Label fx:id="peer5" />
+
+</VBox>
