@@ -123,6 +123,7 @@ public class MainUIController implements IEditorCallback {
 
         } else if (crdtLog.getOperation() == CRDTLog.DELETE) {
             crdtController.addCRDTLogToDeletionBuffer(crdtLog);
+            main_text_area.setText(crdtController.getText());
         }
 
         refreshUI();

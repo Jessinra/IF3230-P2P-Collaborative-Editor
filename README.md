@@ -17,9 +17,9 @@ Langkah Menjalankan Program:
 
 |          Nama          |    NIM   |  Persentase | Deskripsi |
 | ---------------------- | -------- | ----------- | --------- |
-| Shandy                 | 13516097 | XX%         | UI, Controller, deletion buffer, Laporan     |
-| Jessin D.              | 13516112 | XX%         | CRDT, Version Vector                         |
-| I Kadek Yuda B. G.     | 13516115 | XX%         | Messenger, Peer2Peer, laporan                |
+| Shandy                 | 13516097 | 33.33%      | UI, Controller, deletion buffer, Laporan     |
+| Jessin D.              | 13516112 | 33.33%      | CRDT, Version Vector                         |
+| I Kadek Yuda B. G.     | 13516115 | 33.33%      | Messenger, Peer2Peer, laporan                |
 
 # Laporan
 
@@ -93,25 +93,35 @@ Kasus Pengujian:
 4. Pengguna 1 dan Pengguna 2 melakukan *delete* karakter di posisi *cursor* yang sama.
 
 Hasil Pengujian:
-TBD
+Program tidak bekerja di dua komputer berbeda sehingga pengujian konkurensi tidak bisa dilakukan
 
 ### Kasus Konsistensi
 Kasus Pengujian:
 
 Hasil Pengujian:
-TBD
+Program berjalan dengan baik
 
 ### Kasus *Deletion Buffer*
 Kasus Pengujian:
+1. Pengguna 1 melakukan *delete* karakter.
+2. Pengguna 2 tidak melakukan operasi (karena operasi RemoteDelete masuk ke deletion buffer)
+3. Pengguna 1 melakukan *insert* karakter baru.
+4. Pengguna 2 melakukan *Remote Delete* kemudian melakukan *RemoteInsert* sesuai dari Pengguna 1
 
 Hasil Pengujian:
-TBD
+Program berjalan dengan baik
 
 ### Kasus *Version Vector*
 Kasus Pengujian:
+1. Pengguna 1 melakukan *delete* karakter.
+2. Pengguna 2 tidak melakukan operasi (karena operasi RemoteDelete masuk ke deletion buffer)
+3. Pengguna 1 melakukan *insert* karakter baru.
+4. Pengguna 2 melakukan *Remote Delete* kemudian melakukan *RemoteInsert* sesuai dari Pengguna 1
+
 
 Hasil Pengujian:
-TBD
+Program berjalan dengan baik
 
 ## Screenshot
-// Gambar Screenshot (Masukkan ke dalam repo ini aja gambarnya)
+Berikut adalah **screenshot** dari program:
+![Screenshot](./asset/screenshot.png "Screenshot")
